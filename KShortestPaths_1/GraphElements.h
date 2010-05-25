@@ -1,3 +1,6 @@
+/************************************************************************/
+/* $Id$                                                                 */
+/************************************************************************/
 #pragma once
 
 class GVertex
@@ -6,9 +9,18 @@ class GVertex
 
 private:
 	int m_nID;
+	double m_dWeight;	
 	
-
+public:
+	double Weight() const { return m_dWeight; }
+	void Weight(double val) { m_dWeight = val; }
 };
+
+// Determine priority.
+bool operator<(const GVertex& a, const GVertex& b)
+{
+	return a.Weight() < b.Weight();
+}
 
 class GEdge
 {
