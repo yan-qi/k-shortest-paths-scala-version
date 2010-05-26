@@ -5,22 +5,46 @@
 
 class GVertex
 {
-	const static int ID; 
+	static int ID; 
 
 private:
 	int m_nID;
 	double m_dWeight;	
 	
 public:
+	GVertex(){ m_nID = ID++; }
+	int getID() const { return m_nID; }
+
+
 	double Weight() const { return m_dWeight; }
 	void Weight(double val) { m_dWeight = val; }
 };
 
-// Determine priority.
-bool operator<(const GVertex& a, const GVertex& b)
+class Comparator4GVertex
 {
-	return a.Weight() < b.Weight();
-}
+public:
+	// Determine priority.
+	bool operator()(const GVertex& a, const GVertex& b) const
+	{
+		return a.Weight() < b.Weight();
+	}
+
+	bool operator()(const GVertex* a, const GVertex* b) const
+	{
+		return a->Weight() < b->Weight();
+	}
+};
+
+// Determine priority.
+// bool operator<(const GVertex& a, const GVertex& b)
+// {
+// 	return a.Weight() < b.Weight();
+// }
+// 
+// bool operator<(const GVertex* a, const GVertex* b)
+// {
+// 	return a->Weight() < b->Weight();
+// }
 
 class GEdge
 {
