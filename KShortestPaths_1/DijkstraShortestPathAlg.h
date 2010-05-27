@@ -6,7 +6,7 @@
 
 class DijkstraShortestPathAlg
 {
-	const GDirectGraph& m_rDirectGraph;
+	const Graph& m_rDirectGraph;
 
 	std::set<GVertex*, Comparator4GVertex> m_stDeterminedVertices; // The set of vertex IDs
 	std::priority_queue<GVertex*, std::vector<GVertex*>, Comparator4GVertex> m_quCandidateVertices;
@@ -15,7 +15,7 @@ class DijkstraShortestPathAlg
 			
 
 public:
-	DijkstraShortestPathAlg(const GDirectGraph& pGraph):m_rDirectGraph(pGraph){}
+	DijkstraShortestPathAlg(const Graph& pGraph):m_rDirectGraph(pGraph){}
 	~DijkstraShortestPathAlg(void);
 
 	void clear();

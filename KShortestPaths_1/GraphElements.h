@@ -59,8 +59,3 @@ public:
 	// Getter & Setter
 
 };
-
-class GDirectGraph
-{
-
-};

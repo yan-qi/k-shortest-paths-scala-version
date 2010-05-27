@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "GraphElements.h"
+#include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 
 using namespace std;
@@ -54,5 +55,8 @@ void DijkstraShortestPathAlg::determine_shortest_paths(GVertex& source, GVertex&
 
 void DijkstraShortestPathAlg::improve2vertex( GVertex& cur_vertex, bool is_source2sink )
 {
-
+	// 1. get the neighboring vertices 
+	
+// 	Set<BaseVertex> neighbor_vertex_list = is_source2sink ? 
+// 		_graph.get_adjacent_vertices(vertex) : _graph.get_precedent_vertices(vertex);
 }
