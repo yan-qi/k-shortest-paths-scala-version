@@ -13,6 +13,7 @@ private:
 	
 public:
 	GVertex(){ m_nID = ID++; }
+	GVertex(int ID_){ m_nID = ID_; }
 	int getID() const { return m_nID; }
 
 
@@ -58,4 +59,17 @@ public:
 	
 	// Getter & Setter
 
+};
+
+//////////////////////////////////////////////////////////////////////////
+// A class for the object deletion
+//////////////////////////////////////////////////////////////////////////
+template<class T>
+class DeleteFunc
+{
+public:
+	void operator()(const T* it) const
+	{
+		delete it;
+	}
 };
