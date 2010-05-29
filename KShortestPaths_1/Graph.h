@@ -21,4 +21,5 @@ public: // methods
 	~Graph(void){}
 
 	void import_from_file(const std::string& file_name);
+
 };

@@ -20,6 +20,14 @@ void test()
 }
 
 
+set<int>& getSet()
+{
+	set<int> tmp2;
+	tmp2.insert(4);
+	tmp2.insert(5);
+	tmp_map.insert(make_pair(2, tmp2));
+	return tmp2;
+}
 
 int main(...)
 {
@@ -30,4 +38,5 @@ int main(...)
 	{
 		cout << (*iter).second.size() << endl;
 	}
+	cout << getSet().size() << endl;
 }

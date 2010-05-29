@@ -85,25 +85,26 @@ void Graph::import_from_file( const string& input_file_name )
 		ifs >> edge_weight;
 
 		///3.2.1 construct the vertices
-		GIntVertex* start_vertex_pt = new GIntVertex(start_vertex);
-		if (m_stVertices.find(start_vertex) == m_stVertices.end())
-		{
-'
-		}
-
-		GIntVertex* end_vertex_pt = new GIntVertex(end_vertex);
+		/*GIntVertex* start_vertex_pt = new GIntVertex(start_vertex);*/
+		GIntVertex* start_vertex_pt = get_vertex(start_vertex);
+		GIntVertex* end_vertex_pt = get_vertex(end_vertex);
 
 		///3.2.2 add the edge weight
 		//// note that the duplicate edge would overwrite the one occurring before. 
-		m_mpEdgeWeight.insert(make_pair(get_edge_code(start_vertex_pt, end_vertex_pt), edge_weight));
+		m_mpEdgeCodeWeight.insert(make_pair(get_edge_code(start_vertex_pt, end_vertex_pt), edge_weight));
 
 		///3.2.3 update the fan-in or fan-out variables
-		set<GIntVertex*> fan_in_set;
+		set<GIntVertex*> fan_in_set = get_vertex_set(end_vertex_pt, m_mpFaninVertices);
+		fan_in_set.insert(start_vertex_pt);
+
+		set<GIntVertex*> fan_out_set = get_vertex_set(start_vertex_pt, m_mpFanoutVertices);
+		fan_out_set.insert(end_vertex_pt);
 		
 		
 	}	
-
-	m_nEdgeNum = m_mpEdgeWeight.size();
+	
+	m_nVertexNum = m_vtVertices.size();
+	m_nEdgeNum = m_mpEdgeCodeWeight.size();
 
 	ifs.close();	
 }
