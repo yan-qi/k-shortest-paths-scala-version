@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "GraphElements.h"
+#include "TGraph.h"
 #include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 
@@ -27,14 +28,14 @@ void DijkstraShortestPathAlg::clear()
 	}
 }
 
-void DijkstraShortestPathAlg::determine_shortest_paths(GVertex& source, GVertex& sink, bool is_source2sink )
+void DijkstraShortestPathAlg::determine_shortest_paths(GIntVertex& source, GIntVertex& sink, bool is_source2sink )
 {
 	//1. clear the intermediate variables
 	clear();
 
 	//2. initiate the local variables
-	GVertex* start_vertex = is_source2sink ? &sink : &source;
-	GVertex* end_vertex = is_source2sink ? &source : &sink;
+	GIntVertex* start_vertex = is_source2sink ? &sink : &source;
+	GIntVertex* end_vertex = is_source2sink ? &source : &sink;
 	m_mpStartDistanceIndex.insert(make_pair(start_vertex, 0));
 	start_vertex->Weight(0);
 	m_quCandidateVertices.push(start_vertex);
@@ -42,7 +43,7 @@ void DijkstraShortestPathAlg::determine_shortest_paths(GVertex& source, GVertex&
 	//3. start searching for the shortest path
 	while (!m_quCandidateVertices.empty())
 	{
-		GVertex* cur_vertex_pt = m_quCandidateVertices.top();
+		GIntVertex* cur_vertex_pt = m_quCandidateVertices.top();
 		m_quCandidateVertices.pop();
 
 		if (cur_vertex_pt->getID() == end_vertex->getID()) break;
@@ -53,7 +54,7 @@ void DijkstraShortestPathAlg::determine_shortest_paths(GVertex& source, GVertex&
 	}
 }
 
-void DijkstraShortestPathAlg::improve2vertex( GVertex& cur_vertex, bool is_source2sink )
+void DijkstraShortestPathAlg::improve2vertex( GIntVertex& cur_vertex, bool is_source2sink )
 {
 	// 1. get the neighboring vertices 
 	

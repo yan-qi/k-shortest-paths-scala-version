@@ -8,10 +8,10 @@ class DijkstraShortestPathAlg
 {
 	const Graph& m_rDirectGraph;
 
-	std::set<GVertex*, Comparator4GVertex> m_stDeterminedVertices; // The set of vertex IDs
-	std::priority_queue<GVertex*, std::vector<GVertex*>, Comparator4GVertex> m_quCandidateVertices;
-	std::map<GVertex*,double> m_mpStartDistanceIndex; 
-	std::map<GVertex*,GVertex*> m_mpPredecessorVertex; 
+	std::set<GIntVertex*, WeightComparator4GVertex<int> > m_stDeterminedVertices; // The set of vertex IDs
+	std::priority_queue<GIntVertex*, std::vector<GIntVertex*>, WeightComparator4GVertex<int> > m_quCandidateVertices;
+	std::map<GIntVertex*,double> m_mpStartDistanceIndex; 
+	std::map<GIntVertex*,GIntVertex*> m_mpPredecessorVertex; 
 			
 
 public:
@@ -22,6 +22,6 @@ public:
 
 protected:
 
-	void determine_shortest_paths(GVertex& source, GVertex& sink, bool is_source2sink);
-	void improve2vertex(GVertex& cur_vertex, bool is_source2sink);
+	void determine_shortest_paths(GIntVertex& source, GIntVertex& sink, bool is_source2sink);
+	void improve2vertex(GIntVertex& cur_vertex, bool is_source2sink);
 };
