@@ -51,6 +51,7 @@ public:
 	TPath<T> get_shortest_path(TVertex* source, TVertex* sink)
 	{
 		determine_shortest_paths(source, sink, true);
+
 		std::vector<TVertex*> vertex_list;
 		std::map<TVertex*, double>::const_iterator pos = 
 			m_mpStartDistanceIndex.find(sink);
@@ -61,7 +62,7 @@ public:
 			TVertex* cur_vertex_pt = sink;
 			do 
 			{
-				vertex_list.insert(vertex_list.begin(), cur_vertex_pt->_node((()(((.m_mpStartDistanceIndex.))))));
+				vertex_list.insert(vertex_list.begin(), cur_vertex_pt);
 				
 				std::map<TVertex*, TVertex*>::const_iterator pre_pos = 
 					m_mpPredecessorVertex.find(cur_vertex_pt);
@@ -86,8 +87,8 @@ protected:
 		clear();
 
 		//2. initiate the local variables
-		TVertex* start_vertex = is_source2sink ? sink : source;
-		TVertex* end_vertex = is_source2sink ? source : sink;
+		TVertex* end_vertex = is_source2sink ? sink : source;
+		TVertex* start_vertex = is_source2sink ? source : sink;
 		m_mpStartDistanceIndex.insert(make_pair(start_vertex, 0));
 		start_vertex->Weight(0);
 		m_quCandidateVertices.push(start_vertex);
@@ -109,13 +110,13 @@ protected:
 	void improve2vertex(TVertex* cur_vertex_pt, bool is_source2sink)
 	{
 		// 1. get the neighboring vertices 
-		set<TVertex*> neighbor_vertex_list = is_source2sink ? 
+		set<TVertex*>* neighbor_vertex_list_pt = is_source2sink ? 
 			m_rDirectGraph.get_adjacent_vertex_set(cur_vertex_pt) : 
 			m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt);
 
-		// 2. update teh distance passing on the current vertex
-		for(set<TVertex*>::iterator cur_neighbor_pos=neighbor_vertex_list.begin(); 
-			cur_neighbor_pos!=neighbor_vertex_list.end(); ++cur_neighbor_pos)
+		// 2. update the distance passing on the current vertex
+		for(set<TVertex*>::iterator cur_neighbor_pos=neighbor_vertex_list_pt->begin(); 
+			cur_neighbor_pos!=neighbor_vertex_list_pt->end(); ++cur_neighbor_pos)
 		{
 			//2.1 skip if it has been visited before
 			if (m_stDeterminedVertices.find(*cur_neighbor_pos)!=m_stDeterminedVertices.end())
@@ -134,8 +135,8 @@ protected:
 			cur_pos = m_mpStartDistanceIndex.find(*cur_neighbor_pos);
 			if (cur_pos == m_mpStartDistanceIndex.end() || cur_pos->second > distance)
 			{
-				m_mpStartDistanceIndex.insert(make_pair(cur_pos->first, distance));
-				m_mpPredecessorVertex.insert(make_pair(cur_pos->first, cur_vertex_pt));
+				m_mpStartDistanceIndex.insert(make_pair(*cur_neighbor_pos, distance));
+				m_mpPredecessorVertex.insert(make_pair(*cur_neighbor_pos, cur_vertex_pt));
 				(*cur_neighbor_pos)->Weight(distance);
 				m_quCandidateVertices.push(*cur_neighbor_pos);
 			}

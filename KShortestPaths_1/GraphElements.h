@@ -25,13 +25,13 @@ class GVertex
 {
 	int m_nID;
 	double m_dWeight;	
-	T _node;
+	T _node; /* Note that the type of node may need to be modified for the improvement upon the performance. */
 
 public:
 
 	//typedef GVertex<T> TYPE;
 
-	GVertex(T node){ _node = node; }
+	GVertex(T node):_node(node){}
 
 	int getID() const { return m_nID; }
 	void setID(int ID_) { m_nID = ID_; }
