@@ -28,7 +28,9 @@ class GVertex
 	T _node;
 
 public:
-	
+
+	//typedef GVertex<T> TYPE;
+
 	GVertex(T node){ _node = node; }
 
 	int getID() const { return m_nID; }
@@ -36,6 +38,8 @@ public:
 
 	double Weight() const { return m_dWeight; }
 	void Weight(double val) { m_dWeight = val; }
+
+	T getNode() const {return _node;}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -58,6 +62,22 @@ public:
 	}
 
 	bool operator()(const GVertex<T>* a, const GVertex<T>* b) const
+	{
+		return a->Weight() < b->Weight();
+	}
+};
+
+template<class T>
+class WeightComparator
+{
+public:
+	// Determine priority.
+	bool operator()(const T& a, const T& b) const
+	{
+		return a.Weight() < b.Weight();
+	}
+
+	bool operator()(const T* a, const T* b) const
 	{
 		return a->Weight() < b->Weight();
 	}

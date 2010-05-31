@@ -21,9 +21,6 @@
 
 using namespace std;
 
-template<typename T>
-const double TGraph<T>::DISCONNECT = (numeric_limits<double>::max)();
-
 // template<typename T>
 // void TGraph<T>::clear()
 // {
