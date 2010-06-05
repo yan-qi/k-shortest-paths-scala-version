@@ -44,7 +44,7 @@ import edu.asu.emit.qyan.alg.model.VariableGraph;
 /**
  * @author <a href='mailto:Yan.Qi@asu.edu'>Yan Qi</a>
  * @version $Revision: 784 $
- * @latest $Id: YenTopKShortestPathsAlgTest.java 784 2009-06-19 20:08:40Z qyan $
+ * @latest $Id$
  */
 public class YenTopKShortestPathsAlgTest
 {
