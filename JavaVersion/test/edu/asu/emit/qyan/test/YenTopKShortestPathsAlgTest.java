@@ -71,7 +71,7 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println(yenAlg.get_result_list().size());	
 	}
 	
-	@Test
+//	@Test
 	public void testYenShortestPathsAlg2()
 	{
 		System.out.println("Obtain all paths in increasing order! - updated!");
@@ -86,7 +86,31 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println("Result # :"+i);
 		System.out.println("Candidate # :"+yenAlg.get_cadidate_size());
 		System.out.println("All generated : "+yenAlg.get_generated_path_size());
-		
 	}
 	
+	@Test
+	public void testYenShortestPathsAlg4MultipleGraphs()
+	{
+		System.out.println("Graph 1 - ");
+		YenTopKShortestPathsAlg yenAlg = new YenTopKShortestPathsAlg(
+				graph, graph.get_vertex(4), graph.get_vertex(5));
+		int i=0;
+		while(yenAlg.has_next())
+		{
+			System.out.println("Path "+i+++" : "+yenAlg.next());
+		}
+		
+		System.out.println("Result # :"+i);
+		System.out.println("Candidate # :"+yenAlg.get_cadidate_size());
+		System.out.println("All generated : "+yenAlg.get_generated_path_size());
+		
+		///
+		System.out.println("Graph 2 - ");
+		graph = new VariableGraph("data/test_6_1");
+		YenTopKShortestPathsAlg yenAlg1 = new YenTopKShortestPathsAlg(graph);
+		List<Path> shortest_paths_list = yenAlg1.get_shortest_paths(
+				graph.get_vertex(4), graph.get_vertex(5), 100);
+		System.out.println(":"+shortest_paths_list);
+		System.out.println(yenAlg1.get_result_list().size());
+	}
 }

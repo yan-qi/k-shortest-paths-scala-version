@@ -76,4 +76,9 @@ public class Vertex implements BaseVertex, Comparable<Vertex>
 		else 
 			return 0;
 	}
+	
+	public static void reset()
+	{
+		CURRENT_VERTEX_NUM = 0;
+	}
 }

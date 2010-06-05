@@ -118,6 +118,7 @@ public class Graph implements BaseGraph
 	 */
 	public void clear()
 	{
+		Vertex.reset();
 		_vertex_num = 0;
 		_edge_num = 0; 
 		_vertex_list.clear();
@@ -135,6 +136,9 @@ public class Graph implements BaseGraph
 	 */
 	public void import_from_file(final String data_file_name)
 	{
+		// 0. Clear the variables 
+		clear();
+		
 		try
 		{
 			// 1. read the file and put the content in the buffer
