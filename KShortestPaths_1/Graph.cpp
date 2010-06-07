@@ -19,7 +19,7 @@
 #include <iostream>
 #include <algorithm>
 #include "GraphElements.h"
-#include "TGraph.h"
+#include "BasePath..h"
 #include "Graph.h"
 
 using namespace std;
@@ -86,8 +86,8 @@ void Graph::import_from_file( const string& input_file_name )
 
 		///3.2.1 construct the vertices
 		/*GIntVertex* start_vertex_pt = new GIntVertex(start_vertex);*/
-		GIntVertex* start_vertex_pt = get_vertex(start_vertex);
-		GIntVertex* end_vertex_pt = get_vertex(end_vertex);
+		BaseVertex* start_vertex_pt = get_vertex(start_vertex);
+		BaseVertex* end_vertex_pt = get_vertex(end_vertex);
 
 		///3.2.2 add the edge weight
 		//// note that the duplicate edge would overwrite the one occurring before. 
@@ -110,4 +110,23 @@ void Graph::import_from_file( const string& input_file_name )
 	m_nEdgeNum = m_mpEdgeCodeWeight.size();
 
 	ifs.close();	
+}
+
+BaseVertex* Graph::get_vertex( int node_id )
+{
+	BaseVertex* vertex_pt = NULL;
+	const map<int, BaseVertex*>::iterator pos = m_mpVertexIndex.find(node_id);
+	if (pos == m_mpVertexIndex.end())
+	{
+		int vertex_id = m_vtVertices.size();
+		vertex_pt = new Vertex(node_id);
+		vertex_pt->setID(vertex_id);
+		m_vtVertices.push_back(vertex_pt);
+		m_mpVertexIndex.insert(make_pair(node_id, vertex_pt));
+	}else
+	{
+		vertex_pt = m_vtVertices.at(pos->second->getID());
+	}
+
+	return vertex_pt;
 }

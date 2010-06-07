@@ -15,26 +15,25 @@
 
 using namespace std;
 
-template<typename T>
 class DijkstraShortestPathAlg
 {
 public: // types
 
-	typedef GVertex<T> TVertex;
+	//typedef GVertex<T> BaseVertex;
 
 private: // members
 
-	TGraph<T>& m_rDirectGraph;
+	BaseGraph& m_rDirectGraph;
 
-	std::map<TVertex*, double> m_mpStartDistanceIndex; 
-	std::map<TVertex*, TVertex*> m_mpPredecessorVertex; 
+	std::map<BaseVertex*, double> m_mpStartDistanceIndex; 
+	std::map<BaseVertex*, BaseVertex*> m_mpPredecessorVertex; 
 
-	std::set<TVertex*, WeightComparator<TVertex> > m_stDeterminedVertices; // The set of vertex IDs
+	std::set<BaseVertex*, WeightComparator<BaseVertex> > m_stDeterminedVertices; // The set of vertex IDs
 	
-	std::priority_queue<GVertex<T>*, std::vector<GVertex<T>*>, WeightComparator<GVertex<T> > > m_quCandidateVertices;
+	std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightComparator<BaseVertex> > m_quCandidateVertices;
 	
 public:
-	DijkstraShortestPathAlg(TGraph<T>& pGraph):m_rDirectGraph(pGraph){}
+	DijkstraShortestPathAlg(BaseVertex& pGraph):m_rDirectGraph(pGraph){}
 	~DijkstraShortestPathAlg(void){clear();}
 
 	void clear()
@@ -48,23 +47,23 @@ public:
 		}
 	}
 
-	TPath<T> get_shortest_path(TVertex* source, TVertex* sink)
+	BasePath get_shortest_path(BaseVertex* source, BaseVertex* sink)
 	{
 		determine_shortest_paths(source, sink, true);
 
-		std::vector<TVertex*> vertex_list;
-		std::map<TVertex*, double>::const_iterator pos = 
+		std::vector<BaseVertex*> vertex_list;
+		std::map<BaseVertex*, double>::const_iterator pos = 
 			m_mpStartDistanceIndex.find(sink);
 		double weight = pos != m_mpStartDistanceIndex.end() ? pos->second : TGraph<T>::DISCONNECT;
 
 		if (weight < TGraph<T>::DISCONNECT)
 		{
-			TVertex* cur_vertex_pt = sink;
+			BaseVertex* cur_vertex_pt = sink;
 			do 
 			{
 				vertex_list.insert(vertex_list.begin(), cur_vertex_pt);
 				
-				std::map<TVertex*, TVertex*>::const_iterator pre_pos = 
+				std::map<BaseVertex*, BaseVertex*>::const_iterator pre_pos = 
 					m_mpPredecessorVertex.find(cur_vertex_pt);
 
 				if (pre_pos == m_mpPredecessorVertex.end()) break;
@@ -76,19 +75,19 @@ public:
 			/*vertex_list.push_back(source);*/
 			vertex_list.insert(vertex_list.begin(), source);
 		}
-		return TPath<T>(vertex_list, weight);
+		return BasePath(vertex_list, weight);
 	}
 
 protected:
 
-	void determine_shortest_paths(TVertex* source, TVertex* sink, bool is_source2sink)
+	void determine_shortest_paths(BaseVertex* source, BaseVertex* sink, bool is_source2sink)
 	{
 		//1. clear the intermediate variables
 		clear();
 
 		//2. initiate the local variables
-		TVertex* end_vertex = is_source2sink ? sink : source;
-		TVertex* start_vertex = is_source2sink ? source : sink;
+		BaseVertex* end_vertex = is_source2sink ? sink : source;
+		BaseVertex* start_vertex = is_source2sink ? source : sink;
 		m_mpStartDistanceIndex.insert(make_pair(start_vertex, 0));
 		start_vertex->Weight(0);
 		m_quCandidateVertices.push(start_vertex);
@@ -96,7 +95,7 @@ protected:
 		//3. start searching for the shortest path
 		while (!m_quCandidateVertices.empty())
 		{
-			TVertex* cur_vertex_pt = m_quCandidateVertices.top();
+			BaseVertex* cur_vertex_pt = m_quCandidateVertices.top();
 			m_quCandidateVertices.pop();
 
 			if (cur_vertex_pt->getID() == end_vertex->getID()) break;
@@ -107,15 +106,15 @@ protected:
 		}
 	}
 
-	void improve2vertex(TVertex* cur_vertex_pt, bool is_source2sink)
+	void improve2vertex(BaseVertex* cur_vertex_pt, bool is_source2sink)
 	{
 		// 1. get the neighboring vertices 
-		set<TVertex*>* neighbor_vertex_list_pt = is_source2sink ? 
+		set<BaseVertex*>* neighbor_vertex_list_pt = is_source2sink ? 
 			m_rDirectGraph.get_adjacent_vertex_set(cur_vertex_pt) : 
 			m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt);
 
 		// 2. update the distance passing on the current vertex
-		for(set<TVertex*>::iterator cur_neighbor_pos=neighbor_vertex_list_pt->begin(); 
+		for(set<BaseVertex*>::iterator cur_neighbor_pos=neighbor_vertex_list_pt->begin(); 
 			cur_neighbor_pos!=neighbor_vertex_list_pt->end(); ++cur_neighbor_pos)
 		{
 			//2.1 skip if it has been visited before
@@ -125,7 +124,7 @@ protected:
 			}
 
 			//2.2 calculate the distance
-			map<TVertex*, double>::const_iterator cur_pos = m_mpStartDistanceIndex.find(cur_vertex_pt);
+			map<BaseVertex*, double>::const_iterator cur_pos = m_mpStartDistanceIndex.find(cur_vertex_pt);
 			double distance =  cur_pos != m_mpStartDistanceIndex.end() ? cur_pos->second : TGraph<T>::DISCONNECT;
 
 			distance += is_source2sink ? m_rDirectGraph.get_edge_weight(cur_vertex_pt, *cur_neighbor_pos) : 

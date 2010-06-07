@@ -44,8 +44,20 @@ public: // methods
 		m_nEdgeNum = 0;
 		m_nVertexNum = 0;
 
-		m_mpFanoutVertices.clear();
+		for(map<TVertex*, set<TVertex*>*>::const_iterator pos=m_mpFaninVertices.begin();
+			pos!=m_mpFaninVertices.end(); ++pos)
+		{
+			delete pos->second;
+		}
 		m_mpFaninVertices.clear();
+
+		for(map<TVertex*, set<TVertex*>*>::const_iterator pos=m_mpFanoutVertices.begin();
+			pos!=m_mpFanoutVertices.end(); ++pos)
+		{
+			delete pos->second;
+		}
+		m_mpFanoutVertices.clear();
+		
 
 		m_mpEdgeCodeWeight.clear();
 

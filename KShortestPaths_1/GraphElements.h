@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <string>
 
 ///////////////////////////////////////////////////////////////////////////////
 ///  GVertex
@@ -83,19 +84,6 @@ public:
 	}
 };
 
-// Determine priority.
-// bool operator<(const GVertex& a, const GVertex& b)
-// {
-// 	return a.Weight() < b.Weight();
-// }
-// 
-// bool operator<(const GVertex* a, const GVertex* b)
-// {
-// 	return a->Weight() < b->Weight();
-// }
-
-
-
 //////////////////////////////////////////////////////////////////////////
 // A class for the object deletion
 //////////////////////////////////////////////////////////////////////////
@@ -107,4 +95,31 @@ public:
 	{
 		delete it;
 	}
+};
+
+
+
+/**************************************************************************
+*  BaseVertex
+*  <TODO: insert class description here>
+*
+*
+*  @remarks <TODO: insert remarks here>
+*
+*  @author Yan Qi @date 6/6/2010
+**************************************************************************/
+class BaseVertex
+{
+	int m_nID;
+	double m_dWeight;	
+
+public:
+
+	int getID() const { return m_nID; }
+	void setID(int ID_) { m_nID = ID_; }
+
+	double Weight() const { return m_dWeight; }
+	void Weight(double val) { m_dWeight = val; }
+
+	/*std::string print(){ return m_nID; }*/
 };
