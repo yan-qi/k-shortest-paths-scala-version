@@ -40,8 +40,8 @@ public:
 
 	BasePath* get_shortest_path(BaseVertex* source, BaseVertex* sink);
 
+	// The following two methods are prepared for the top-k shortest paths algorithm
 	BasePath* update_cost_forward(BaseVertex* vertex);
-
 	void correct_cost_backward(BaseVertex* vertex);
 
 protected:

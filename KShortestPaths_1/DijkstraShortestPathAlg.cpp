@@ -202,7 +202,7 @@ void DijkstraShortestPathAlg::correct_cost_backward( BaseVertex* vertex )
 
  		double cost_of_cur_vertex = m_mpStartDistanceIndex[cur_vertex_pt];
 
-		set<BaseVertex*>& pre_vertex_set = *(m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt))._Alnod._Alnod._Alnod.;
+		set<BaseVertex*>& pre_vertex_set = *(m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt));
 		for(set<BaseVertex*>::const_iterator pos=pre_vertex_set.begin(); pos!=pre_vertex_set.end();++pos)
 		{
 			map<BaseVertex*,double>::const_iterator pos4StartDistIndexMap = 
