@@ -19,7 +19,8 @@
 #include <iostream>
 #include <algorithm>
 #include "GraphElements.h"
-#include "BasePath..h"
+#include "BasePath.h"
+#include "BaseGraph.h"
 #include "Graph.h"
 
 using namespace std;
@@ -94,15 +95,11 @@ void Graph::import_from_file( const string& input_file_name )
 		m_mpEdgeCodeWeight.insert(make_pair(get_edge_code(start_vertex_pt, end_vertex_pt), edge_weight));
 
 		///3.2.3 update the fan-in or fan-out variables
-		//TVertexPt2SetMapIterator pos = get_vertex_set(end_vertex_pt, m_mpFaninVertices);
+		//// Fan-in
 		get_vertex_set_pt(end_vertex_pt, m_mpFaninVertices)->insert(start_vertex_pt);
-// 		set<GIntVertex*> fan_in_set = get_vertex_set(end_vertex_pt, m_mpFaninVertices);
-// 		fan_in_set.insert(start_vertex_pt);
 
+		//// Fan-out
 		get_vertex_set_pt(start_vertex_pt, m_mpFanoutVertices)->insert(end_vertex_pt);
-// 		set<GIntVertex*> fan_out_set = get_vertex_set(start_vertex_pt, m_mpFanoutVertices);
-// 		fan_out_set.insert(end_vertex_pt);
-		
 		
 	}	
 	

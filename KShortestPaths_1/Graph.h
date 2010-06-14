@@ -11,12 +11,16 @@
 #pragma once
 
 /*typedef GVertex<int> GIntVertex;*/
+using namespace std;
 
 class Vertex : public BaseVertex
 {
 	int node_id; 
 	
 public:
+	
+	Vertex(int nID){ node_id = nID; }
+
 	int get_node_id() const { return node_id; }
 	void set_node_id(int val) { node_id = val; }
 
@@ -25,6 +29,9 @@ public:
 class Path : public BasePath
 {
 public: 
+
+	Path(const std::vector<BaseVertex*>& vertex_list, double weight):BasePath(vertex_list,weight){}
+
 	// display the content
 	void PrintOut(std::ostream& out_stream) const
 	{

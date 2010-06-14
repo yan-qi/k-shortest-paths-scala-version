@@ -121,5 +121,5 @@ public:
 	double Weight() const { return m_dWeight; }
 	void Weight(double val) { m_dWeight = val; }
 
-	/*std::string print(){ return m_nID; }*/
+	void PrintOut(std::ostream& out_stream){};
 };

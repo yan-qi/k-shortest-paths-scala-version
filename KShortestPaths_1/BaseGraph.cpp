@@ -19,6 +19,8 @@
 #include "GraphElements.h"
 #include "BaseGraph.h"
 
+using namespace std;
+
 const double BaseGraph::DISCONNECT = (numeric_limits<double>::max)();
 
 void BaseGraph::clear()

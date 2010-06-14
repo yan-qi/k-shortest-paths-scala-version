@@ -12,7 +12,9 @@
 #include <iostream>
 #include <algorithm>
 #include "GraphElements.h"
-#include "TGraph.h"
+#include "BasePath.h"
+#include "BaseGraph.h"
+//#include "TGraph.h"
 #include "Graph.h"
 #include "TPath.h"
 #include "DijkstraShortestPathAlg.h"
@@ -44,8 +46,10 @@ set<int> getSet()
 void testGraph()
 {
 	Graph my_graph("data/test_2");
-	DijkstraShortestPathAlg<int> shortest_path_alg(my_graph);
-	shortest_path_alg.get_shortest_path(my_graph.get_vertex_by_ID(0), my_graph.get_vertex_by_ID(2)).PrintOut(cout);
+	DijkstraShortestPathAlg shortest_path_alg(my_graph);
+	BasePath* result = 
+		shortest_path_alg.get_shortest_path(my_graph.get_vertex_by_ID(0), my_graph.get_vertex_by_ID(2));
+	result->PrintOut(cout);
 }
 
 int main(...)

@@ -12,14 +12,16 @@
 
 #pragma once
 
+using namespace std;
+
 class BaseGraph
 {
 public: // members
 
 	const static double DISCONNECT; 
 
-	typedef typename set<BaseVertex*>::iterator VertexPtSetIterator;
-	typedef typename map<BaseVertex*, set<BaseVertex*>*>::iterator BaseVertexPt2SetMapIterator;
+	typedef set<BaseVertex*>::iterator VertexPtSetIterator;
+	typedef map<BaseVertex*, set<BaseVertex*>*>::iterator BaseVertexPt2SetMapIterator;
 
 protected: // members
 
