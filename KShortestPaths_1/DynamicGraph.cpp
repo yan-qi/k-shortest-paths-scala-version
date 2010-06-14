@@ -17,7 +17,7 @@
 #include <utility>
 #include "GraphElements.h"
 #include "BaseGraph.h"
-#include "VariableGraph.h"
+#include "DynamicGraph.h"
 
 using namespace std;
 
