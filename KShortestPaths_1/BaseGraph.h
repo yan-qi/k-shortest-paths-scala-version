@@ -35,6 +35,16 @@ protected: // members
 
 public: // methods
 
+	BaseGraph(){}; //default constructor
+	BaseGraph(const BaseGraph& graph) /// copy constructor
+	{
+		m_nVertexNum = graph.m_nVertexNum;
+		m_nEdgeNum = graph.m_nEdgeNum;
+		m_vtVertices.assign(graph.m_vtVertices.begin(),graph.m_vtVertices.end());
+		m_mpFaninVertices.insert(graph.m_mpFaninVertices.begin(),graph.m_mpFaninVertices.end());
+		m_mpFanoutVertices.insert(graph.m_mpFanoutVertices.begin(),graph.m_mpFanoutVertices.end());
+		m_mpEdgeCodeWeight.insert(graph.m_mpEdgeCodeWeight.begin(),graph.m_mpEdgeCodeWeight.end());
+	}
 	virtual ~BaseGraph(void){clear();}
 
 	void clear();
