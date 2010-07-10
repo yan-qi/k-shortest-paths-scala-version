@@ -57,7 +57,13 @@ public: // members
 public: // methods
 	
 	Graph(const std::string& file_name);
-	~Graph(void){ m_mpVertexIndex.clear(); }
+
+	Graph(const Graph& rGraph):BaseGraph(rGraph)
+	{
+		m_mpVertexIndex.insert(rGraph.m_mpVertexIndex.begin(),rGraph.m_mpVertexIndex.end());
+	}
+
+	virtual ~Graph(void){ m_mpVertexIndex.clear(); }
 
 	void import_from_file(const std::string& file_name);
 
