@@ -40,6 +40,26 @@ public:
 
 	BasePath* get_shortest_path(BaseVertex* source, BaseVertex* sink);
 
+	void set_predecessor_vertex(BaseVertex* vt1, BaseVertex* vt2)
+	{
+		m_mpPredecessorVertex.insert(make_pair(vt1, vt2));
+	}
+
+	double get_start_distance_at(BaseVertex* vertex)
+	{
+		return m_mpStartDistanceIndex.find(vertex)->second;
+	}
+
+	void set_start_distance_at(BaseVertex* vertex, double weight)
+	{
+		m_mpStartDistanceIndex.insert(make_pair(vertex, weight));
+	}
+
+	void get_shortest_path_flower(BaseVertex* root)
+	{
+		determine_shortest_paths(NULL, root, false);
+	}
+
 	// The following two methods are prepared for the top-k shortest paths algorithm
 	BasePath* update_cost_forward(BaseVertex* vertex);
 	void correct_cost_backward(BaseVertex* vertex);
