@@ -66,7 +66,7 @@ public:
 		for(std::vector<BaseVertex*>::const_iterator pos=m_vtVertexList.begin(); pos!=m_vtVertexList.end();++pos)
 		{
 			(*pos)->PrintOut(out_stream);
-			out_stream << " ";
+			out_stream << "->";
 		}
 // 		out_stream << std::endl <<  "*********************************************" << std::endl;	
  	}

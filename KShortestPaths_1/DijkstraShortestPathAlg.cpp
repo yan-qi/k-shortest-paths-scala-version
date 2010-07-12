@@ -73,7 +73,8 @@ void DijkstraShortestPathAlg::determine_shortest_paths( BaseVertex* source, Base
 		BaseVertex* cur_vertex_pt = m_quCandidateVertices.top();
 		m_quCandidateVertices.pop();
 
-		if (cur_vertex_pt->getID() == end_vertex->getID()) break;
+		//if (cur_vertex_pt->getID() == end_vertex->getID()) break;
+		if (cur_vertex_pt == end_vertex) break;
 
 		m_stDeterminedVertices.insert(cur_vertex_pt);
 
@@ -133,7 +134,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 	double cost = BaseGraph::DISCONNECT;
 
  	// 1. get the set of successors of the input vertex
-	set<BaseVertex*>& adj_vertex_set = *(m_rDirectGraph.get_adjacent_vertex_set(vertex));
+	set<BaseVertex*>* adj_vertex_set = m_rDirectGraph.get_adjacent_vertex_set(vertex);
  
  	// 2. make sure the input vertex exists in the index
 	map<BaseVertex*, double>::iterator pos4vertexInStartDistIndex = m_mpStartDistanceIndex.find(vertex);
@@ -145,7 +146,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 
  	// 3. update the distance from the root to the input vertex if necessary
  	//for(BaseVertex cur_vertex : adj_vertex_set)
-	for(set<BaseVertex*>::const_iterator pos=adj_vertex_set.begin(); pos!=adj_vertex_set.end();++pos)
+	for(set<BaseVertex*>::const_iterator pos=adj_vertex_set->begin(); pos!=adj_vertex_set->end();++pos)
  	{
  		// 3.1 get the distance from the root to one successor of the input vertex
 		map<BaseVertex*, double>::const_iterator cur_vertex_pos = m_mpStartDistanceIndex.find(*pos);

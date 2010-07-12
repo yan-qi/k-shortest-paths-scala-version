@@ -50,7 +50,7 @@ void YenTopKShortestPathsAlg::_init()
 	if (m_pSourceVertex != NULL && m_pTargetVertex != NULL)
 	{
 		BasePath* pShortestPath = get_shortest_path(m_pSourceVertex, m_pTargetVertex);
-		if (pShortestPath != NULL && pShortestPath->Weight() > 0)
+		if (pShortestPath != NULL && pShortestPath->length() > 1)
 		{
 			m_quPathCandidates.push(pShortestPath);
 			m_mpDerivationVertexIndex.insert(make_pair(pShortestPath, m_pSourceVertex));
@@ -81,8 +81,8 @@ BasePath* YenTopKShortestPathsAlg::next()
 	
 	BaseVertex* cur_derivation_pt = m_mpDerivationVertexIndex.find(cur_path)->second; 
 	vector<BaseVertex*> sub_path_of_derivation_pt;
-	int sub_path_length = sub_path_of_derivation_pt.size();
 	cur_path->SubPath(sub_path_of_derivation_pt, cur_derivation_pt);
+	int sub_path_length = sub_path_of_derivation_pt.size();
 
 	//2. Remove the vertices and arcs in the graph
 	for (int i=0; i<count-1; ++i)
