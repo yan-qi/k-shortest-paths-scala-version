@@ -24,10 +24,11 @@ using namespace std;
 
 void testDijkstraGraph()
 {
-	Graph my_graph("data/test_2");
-	DijkstraShortestPathAlg shortest_path_alg(my_graph);
+	BaseGraph* my_graph_pt = new Graph("data/test_2");
+	DijkstraShortestPathAlg shortest_path_alg(my_graph_pt);
 	BasePath* result = 
-		shortest_path_alg.get_shortest_path(my_graph.get_vertex_by_ID(0), my_graph.get_vertex_by_ID(2));
+		shortest_path_alg.get_shortest_path(
+			my_graph_pt->get_vertex_by_ID(0), my_graph_pt->get_vertex_by_ID(2));
 	result->PrintOut(cout);
 }
 

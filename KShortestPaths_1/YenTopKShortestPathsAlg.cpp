@@ -60,7 +60,7 @@ void YenTopKShortestPathsAlg::_init()
 
 BasePath* YenTopKShortestPathsAlg::get_shortest_path( BaseVertex* pSource, BaseVertex* pTarget )
 {
-	DijkstraShortestPathAlg dijkstra_alg(*m_pDynamicGraph);
+	DijkstraShortestPathAlg dijkstra_alg(m_pDynamicGraph);
 	return dijkstra_alg.get_shortest_path(pSource, pTarget);
 }
 
@@ -120,7 +120,7 @@ BasePath* YenTopKShortestPathsAlg::next()
 	}
 
 	//3. Calculate the shortest tree rooted at target vertex in the graph
-	DijkstraShortestPathAlg reverse_tree(*m_pDynamicGraph);
+	DijkstraShortestPathAlg reverse_tree(m_pDynamicGraph);
 	reverse_tree.get_shortest_path_flower(m_pTargetVertex);
 
 	//4. Recover the deleted vertices and update the cost and identify the new candidates results

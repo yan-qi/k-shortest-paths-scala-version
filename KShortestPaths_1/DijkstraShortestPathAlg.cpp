@@ -76,7 +76,8 @@ void DijkstraShortestPathAlg::determine_shortest_paths( BaseVertex* source, Base
 		//if (cur_vertex_pt->getID() == end_vertex->getID()) break;
 		if (cur_vertex_pt == end_vertex) break;
 
-		m_stDeterminedVertices.insert(cur_vertex_pt);
+		//m_stDeterminedVertices.insert(cur_vertex_pt);
+		m_stDeterminedVertices.insert(cur_vertex_pt->getID());
 
 		improve2vertex(cur_vertex_pt, is_source2sink);
 	}
@@ -86,15 +87,16 @@ void DijkstraShortestPathAlg::improve2vertex( BaseVertex* cur_vertex_pt, bool is
 {
 	// 1. get the neighboring vertices 
 	set<BaseVertex*>* neighbor_vertex_list_pt = is_source2sink ? 
-		m_rDirectGraph.get_adjacent_vertex_set(cur_vertex_pt) : 
-	m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt);
+		m_pDirectGraph->get_adjacent_vertex_set(cur_vertex_pt) : 
+	m_pDirectGraph->get_precedent_vertex_set(cur_vertex_pt);
 
 	// 2. update the distance passing on the current vertex
 	for(set<BaseVertex*>::iterator cur_neighbor_pos=neighbor_vertex_list_pt->begin(); 
 		cur_neighbor_pos!=neighbor_vertex_list_pt->end(); ++cur_neighbor_pos)
 	{
 		//2.1 skip if it has been visited before
-		if (m_stDeterminedVertices.find(*cur_neighbor_pos)!=m_stDeterminedVertices.end())
+		//if (m_stDeterminedVertices.find(*cur_neighbor_pos)!=m_stDeterminedVertices.end())
+		if (m_stDeterminedVertices.find((*cur_neighbor_pos)->getID())!=m_stDeterminedVertices.end())
 		{
 			continue;
 		}
@@ -103,8 +105,8 @@ void DijkstraShortestPathAlg::improve2vertex( BaseVertex* cur_vertex_pt, bool is
 		map<BaseVertex*, double>::const_iterator cur_pos = m_mpStartDistanceIndex.find(cur_vertex_pt);
 		double distance =  cur_pos != m_mpStartDistanceIndex.end() ? cur_pos->second : BaseGraph::DISCONNECT;
 
-		distance += is_source2sink ? m_rDirectGraph.get_edge_weight(cur_vertex_pt, *cur_neighbor_pos) : 
-			m_rDirectGraph.get_edge_weight(*cur_neighbor_pos, cur_vertex_pt);
+		distance += is_source2sink ? m_pDirectGraph->get_edge_weight(cur_vertex_pt, *cur_neighbor_pos) : 
+			m_pDirectGraph->get_edge_weight(*cur_neighbor_pos, cur_vertex_pt);
 
 		//2.3 update the distance if necessary
 		cur_pos = m_mpStartDistanceIndex.find(*cur_neighbor_pos);
@@ -134,7 +136,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 	double cost = BaseGraph::DISCONNECT;
 
  	// 1. get the set of successors of the input vertex
-	set<BaseVertex*>* adj_vertex_set = m_rDirectGraph.get_adjacent_vertex_set(vertex);
+	set<BaseVertex*>* adj_vertex_set = m_pDirectGraph->get_adjacent_vertex_set(vertex);
  
  	// 2. make sure the input vertex exists in the index
 	map<BaseVertex*, double>::iterator pos4vertexInStartDistIndex = m_mpStartDistanceIndex.find(vertex);
@@ -154,7 +156,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 			BaseGraph::DISCONNECT : cur_vertex_pos->second;
  
  		// 3.2 calculate the distance from the root to the input vertex
-		distance += m_rDirectGraph.get_edge_weight(vertex, *pos);
+		distance += m_pDirectGraph->get_edge_weight(vertex, *pos);
 	
  		// 3.3 update the distance if necessary 
 		double cost_of_vertex = pos4vertexInStartDistIndex->second;
@@ -203,7 +205,7 @@ void DijkstraShortestPathAlg::correct_cost_backward( BaseVertex* vertex )
 
  		double cost_of_cur_vertex = m_mpStartDistanceIndex[cur_vertex_pt];
 
-		set<BaseVertex*>& pre_vertex_set = *(m_rDirectGraph.get_precedent_vertex_set(cur_vertex_pt));
+		set<BaseVertex*>& pre_vertex_set = *(m_pDirectGraph->get_precedent_vertex_set(cur_vertex_pt));
 		for(set<BaseVertex*>::const_iterator pos=pre_vertex_set.begin(); pos!=pre_vertex_set.end();++pos)
 		{
 			map<BaseVertex*,double>::const_iterator pos4StartDistIndexMap = 
@@ -211,7 +213,7 @@ void DijkstraShortestPathAlg::correct_cost_backward( BaseVertex* vertex )
 			double cost_of_pre_vertex = m_mpStartDistanceIndex.end() == pos4StartDistIndexMap ?
 				BaseGraph::DISCONNECT : pos4StartDistIndexMap->second;
 
-			double fresh_cost = cost_of_cur_vertex + m_rDirectGraph.get_edge_weight(*pos, cur_vertex_pt);
+			double fresh_cost = cost_of_cur_vertex + m_pDirectGraph->get_edge_weight(*pos, cur_vertex_pt);
 			if(cost_of_pre_vertex > fresh_cost)
 			{
 				m_mpStartDistanceIndex[*pos] = fresh_cost;

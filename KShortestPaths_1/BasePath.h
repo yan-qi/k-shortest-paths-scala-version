@@ -26,7 +26,7 @@ public:
 	{
 		m_vtVertexList.assign(vertex_list.begin(), vertex_list.end());
 		m_nLength = m_vtVertexList.size();
-	};
+	}
 	~BasePath(void){}
 
 	double Weight() const { return m_dWeight; }

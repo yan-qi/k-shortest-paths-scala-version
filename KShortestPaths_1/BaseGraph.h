@@ -60,7 +60,7 @@ protected: // methods
 
 public: 
 
-	double get_edge_weight(const BaseVertex* start_vertex_pt, const BaseVertex* end_vertex_pt) const
+	virtual double get_edge_weight(const BaseVertex* start_vertex_pt, const BaseVertex* end_vertex_pt) const
 	{
 		map<int, double>::const_iterator pos = 
 			m_mpEdgeCodeWeight.find(get_edge_code(start_vertex_pt, end_vertex_pt));
@@ -73,19 +73,22 @@ public:
 		return DISCONNECT;
 	}
 
-	BaseVertex* get_vertex_by_ID(int id) const
-	{
-		return m_vtVertices.at(id);
-	}
-
-	set<BaseVertex*>* get_precedent_vertex_set(BaseVertex* vertex) 
+	virtual set<BaseVertex*>* get_precedent_vertex_set(BaseVertex* vertex) 
 	{
 		return get_vertex_set_pt(vertex, m_mpFaninVertices);
 	}
 
-	set<BaseVertex*>* get_adjacent_vertex_set(BaseVertex* vertex) 
+	virtual set<BaseVertex*>* get_adjacent_vertex_set(BaseVertex* vertex) 
 	{
 		return get_vertex_set_pt(vertex, m_mpFanoutVertices);
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	// Non-virtual methods
+	//////////////////////////////////////////////////////////////////////////
+	BaseVertex* get_vertex_by_ID(int id) const
+	{
+		return m_vtVertices.at(id);
 	}
 
 	set<BaseVertex*>* get_vertex_set_pt(BaseVertex* vertex_, 
@@ -103,5 +106,5 @@ public:
 		}
 
 		return pos->second;
-	}
+	}	
 };
