@@ -14,8 +14,7 @@
 #include "GraphElements.h"
 #include "BasePath.h"
 #include "BaseGraph.h"
-#include "Graph.h"
-#include "DynamicGraph.h"
+#include "VariableGraph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"
 
@@ -24,7 +23,7 @@ using namespace std;
 
 void testDijkstraGraph()
 {
-	BaseGraph* my_graph_pt = new Graph("data/test_2");
+	VariableGraph* my_graph_pt = new VariableGraph("data/test_2");
 	DijkstraShortestPathAlg shortest_path_alg(my_graph_pt);
 	BasePath* result = 
 		shortest_path_alg.get_shortest_path(
@@ -34,7 +33,7 @@ void testDijkstraGraph()
 
 void testYenAlg()
 {
-	Graph my_graph("data/test_6_2");
+	VariableGraph my_graph("data/test_6_2");
 	
 	YenTopKShortestPathsAlg yenAlg(my_graph, my_graph.get_vertex_by_ID(4), 
 		my_graph.get_vertex_by_ID(5));

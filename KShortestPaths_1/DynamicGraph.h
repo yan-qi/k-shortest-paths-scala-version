@@ -74,10 +74,10 @@ public:
 
 	void get_vertex_list(vector<BaseVertex*>& vertex_list);
 
-	double get_edge_weight(const BaseVertex* source, const BaseVertex* sink);
+	virtual double get_edge_weight(const BaseVertex* source, const BaseVertex* sink);
 
-	void get_adjacent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);
+	virtual void get_adjacent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);
 
-	void get_precedent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);
+	virtual void get_precedent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);
 	
 };

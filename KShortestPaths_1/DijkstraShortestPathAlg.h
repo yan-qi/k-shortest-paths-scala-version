@@ -23,7 +23,7 @@ public: // types
 
 private: // members
 
-	BaseGraph* m_pDirectGraph;
+	VariableGraph* m_pDirectGraph;
 
 	std::map<BaseVertex*, double> m_mpStartDistanceIndex; 
 	std::map<BaseVertex*, BaseVertex*> m_mpPredecessorVertex; 
@@ -34,7 +34,7 @@ private: // members
 	std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightComparator<BaseVertex> > m_quCandidateVertices;
 	
 public:
-	DijkstraShortestPathAlg(BaseGraph* pGraph):m_pDirectGraph(pGraph){}
+	DijkstraShortestPathAlg(VariableGraph* pGraph):m_pDirectGraph(pGraph){}
 	~DijkstraShortestPathAlg(void){clear();}
 
 	void clear();

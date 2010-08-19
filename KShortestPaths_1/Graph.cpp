@@ -21,6 +21,7 @@
 #include "GraphElements.h"
 #include "BasePath.h"
 #include "BaseGraph.h"
+#include "VariableGraph.h"
 #include "Graph.h"
 
 using namespace std;

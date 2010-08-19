@@ -13,37 +13,37 @@
 /*typedef GVertex<int> GIntVertex;*/
 using namespace std;
 
-class Vertex : public BaseVertex
-{
-	int node_id; 
-	
-public:
-	
-	Vertex(int nID){ node_id = nID; }
-
-	int get_node_id() const { return node_id; }
-	void set_node_id(int val) { node_id = val; }
-
-};
-
-class Path : public BasePath
-{
-public: 
-
-	Path(const std::vector<BaseVertex*>& vertex_list, double weight):BasePath(vertex_list,weight){}
-
-	// display the content
-	void PrintOut(std::ostream& out_stream) const
-	{
-		out_stream << "Cost: " << m_dWeight << " Length: " << m_vtVertexList.size() << std::endl;
-		//std::copy(m_vtVertexList.begin(), m_vtVertexList.end(), std::ostream_iterator<int>(out_stream, " "));
-		for(std::vector<BaseVertex*>::const_iterator pos=m_vtVertexList.begin(); pos!=m_vtVertexList.end();++pos)
-		{
-			out_stream << ((Vertex*)(*pos))->get_node_id() << " ";
-		}
-		out_stream << std::endl <<  "*********************************************" << std::endl;	
-	}
-};
+// class Vertex : public BaseVertex
+// {
+// 	int node_id; 
+// 	
+// public:
+// 	
+// 	Vertex(int nID){ node_id = nID; }
+// 
+// 	int get_node_id() const { return node_id; }
+// 	void set_node_id(int val) { node_id = val; }
+// 
+// };
+// 
+// class Path : public BasePath
+// {
+// public: 
+// 
+// 	Path(const std::vector<BaseVertex*>& vertex_list, double weight):BasePath(vertex_list,weight){}
+// 
+// 	// display the content
+// 	void PrintOut(std::ostream& out_stream) const
+// 	{
+// 		out_stream << "Cost: " << m_dWeight << " Length: " << m_vtVertexList.size() << std::endl;
+// 		//std::copy(m_vtVertexList.begin(), m_vtVertexList.end(), std::ostream_iterator<int>(out_stream, " "));
+// 		for(std::vector<BaseVertex*>::const_iterator pos=m_vtVertexList.begin(); pos!=m_vtVertexList.end();++pos)
+// 		{
+// 			out_stream << ((Vertex*)(*pos))->get_node_id() << " ";
+// 		}
+// 		out_stream << std::endl <<  "*********************************************" << std::endl;	
+// 	}
+// };
 
 
 /*class Graph : public TGraph<int>*/

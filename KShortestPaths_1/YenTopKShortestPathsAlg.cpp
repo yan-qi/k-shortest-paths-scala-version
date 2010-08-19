@@ -18,20 +18,11 @@
 #include "GraphElements.h"
 #include "BasePath.h"
 #include "BaseGraph.h"
-#include "Graph.h"
-#include "DynamicGraph.h"
+#include "VariableGraph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"
 
 using namespace std;
-
-// YenTopKShortestPathsAlg::YenTopKShortestPathsAlg(void)
-// {
-// }
-// 
-// YenTopKShortestPathsAlg::~YenTopKShortestPathsAlg(void)
-// {
-// }
 
 void YenTopKShortestPathsAlg::clear()
 {
@@ -60,7 +51,7 @@ void YenTopKShortestPathsAlg::_init()
 
 BasePath* YenTopKShortestPathsAlg::get_shortest_path( BaseVertex* pSource, BaseVertex* pTarget )
 {
-	DijkstraShortestPathAlg dijkstra_alg(m_pDynamicGraph);
+	DijkstraShortestPathAlg dijkstra_alg(m_pGraph);
 	return dijkstra_alg.get_shortest_path(pSource, pTarget);
 }
 
@@ -107,20 +98,20 @@ BasePath* YenTopKShortestPathsAlg::next()
 
 		//
 		BaseVertex* cur_succ_vertex = cur_result_path->GetVertex(sub_path_length+1);
-		m_pDynamicGraph->remove_edge(make_pair(cur_derivation_pt->getID(), cur_succ_vertex->getID()));
+		m_pGraph->remove_edge(make_pair(cur_derivation_pt->getID(), cur_succ_vertex->getID()));
 	}
 
 	//2.1 remove vertices and edges along the current result
 	int path_length = cur_path->length();
 	for(int i=0; i<path_length-1; ++i)
 	{
-		m_pDynamicGraph->remove_vertex(cur_path->GetVertex(i)->getID());
-		m_pDynamicGraph->remove_edge(make_pair(
+		m_pGraph->remove_vertex(cur_path->GetVertex(i)->getID());
+		m_pGraph->remove_edge(make_pair(
 			cur_path->GetVertex(i)->getID(), cur_path->GetVertex(i+1)->getID()));
 	}
 
 	//3. Calculate the shortest tree rooted at target vertex in the graph
-	DijkstraShortestPathAlg reverse_tree(m_pDynamicGraph);
+	DijkstraShortestPathAlg reverse_tree(m_pGraph);
 	reverse_tree.get_shortest_path_flower(m_pTargetVertex);
 
 	//4. Recover the deleted vertices and update the cost and identify the new candidates results
@@ -129,7 +120,7 @@ BasePath* YenTopKShortestPathsAlg::next()
 	{
 		//4.1 Get the vertex to be recovered
 		BaseVertex* cur_recover_vertex = cur_path->GetVertex(i);
-		m_pDynamicGraph->recover_removed_vertex(cur_recover_vertex->getID());
+		m_pGraph->recover_removed_vertex(cur_recover_vertex->getID());
 
 		//4.2 Check if we should stop continuing in the next iteration
 		if (cur_recover_vertex->getID() == cur_derivation_pt->getID())
@@ -158,7 +149,7 @@ BasePath* YenTopKShortestPathsAlg::next()
 					j = path_length;
 				}else
 				{
-					cost += m_pDynamicGraph->get_edge_weight_of_graph(
+					cost += m_pGraph->get_edge_weight(
 						cur_path->GetVertex(j), cur_path->GetVertex(1+j));
 					pre_path_list.push_back(cur_vertex);
 				}
@@ -182,10 +173,10 @@ BasePath* YenTopKShortestPathsAlg::next()
 
 		//4.5 Restore the edge
 		BaseVertex* succ_vertex = cur_path->GetVertex(i+1);
-		m_pDynamicGraph->recover_removed_edge(make_pair(cur_recover_vertex->getID(), succ_vertex->getID()));
+		m_pGraph->recover_removed_edge(make_pair(cur_recover_vertex->getID(), succ_vertex->getID()));
 
 		//4.6 Update cost if necessary
-		double cost_1 = m_pDynamicGraph->get_edge_weight(cur_recover_vertex, succ_vertex)
+		double cost_1 = m_pGraph->get_edge_weight(cur_recover_vertex, succ_vertex)
 			+ reverse_tree.get_start_distance_at(succ_vertex);
 
 		if (reverse_tree.get_start_distance_at(cur_recover_vertex) > cost_1)
@@ -197,8 +188,8 @@ BasePath* YenTopKShortestPathsAlg::next()
 	}
 
 	//5. Restore everything
-	m_pDynamicGraph->recover_removed_edges();
-	m_pDynamicGraph->recover_removed_vertices();
+	m_pGraph->recover_removed_edges();
+	m_pGraph->recover_removed_vertices();
 
 	return cur_path;
 }
