@@ -23,11 +23,11 @@ using namespace std;
 
 void testDijkstraGraph()
 {
-	VariableGraph* my_graph_pt = new VariableGraph("data/test_2");
+	VariableGraph* my_graph_pt = new VariableGraph("data/test_6_2");
 	DijkstraShortestPathAlg shortest_path_alg(my_graph_pt);
 	BasePath* result = 
 		shortest_path_alg.get_shortest_path(
-			my_graph_pt->get_vertex_by_ID(0), my_graph_pt->get_vertex_by_ID(2));
+			my_graph_pt->get_vertex_by_ID(4), my_graph_pt->get_vertex_by_ID(5));
 	result->PrintOut(cout);
 }
 

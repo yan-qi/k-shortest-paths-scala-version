@@ -17,7 +17,6 @@
 #include <vector>
 #include "GraphElements.h"
 #include "BasePath.h"
-#include "BaseGraph.h"
 #include "VariableGraph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"

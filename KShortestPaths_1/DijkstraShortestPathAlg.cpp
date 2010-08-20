@@ -15,7 +15,6 @@
 #include <map>
 #include <queue>
 #include <vector>
-
 #include "GraphElements.h"
 #include "BasePath.h"
 #include "VariableGraph.h"
