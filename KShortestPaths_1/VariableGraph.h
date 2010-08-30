@@ -87,6 +87,8 @@ public:
 	int get_edge_code(const BaseVertex* start_vertex_pt, const BaseVertex* end_vertex_pt) const;
 	set<BaseVertex*>* get_vertex_set_pt(BaseVertex* vertex_, map<BaseVertex*, set<BaseVertex*>*>& vertex_container_index);
 
+	double get_original_edge_weight(const BaseVertex* source, const BaseVertex* sink);
+
 	double get_edge_weight(const BaseVertex* source, const BaseVertex* sink);
 	void get_adjacent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);
 	void get_precedent_vertices(BaseVertex* vertex, set<BaseVertex*>& vertex_set);

@@ -136,13 +136,17 @@ BaseVertex* VariableGraph::get_vertex( int node_id )
 		if (pos == m_mpVertexIndex.end())
 		{
 			int vertex_id = m_vtVertices.size();
-			vertex_pt = new Vertex(node_id);
-			vertex_pt->setID(vertex_id);
-			m_vtVertices.push_back(vertex_pt);
+			//vertex_pt = new Vertex(node_id);
+			//vertex_pt->setID(vertex_id);
+			vertex_pt = new BaseVertex();
+			vertex_pt->setID(node_id);
 			m_mpVertexIndex.insert(make_pair(node_id, vertex_pt));
+
+			m_vtVertices.push_back(vertex_pt);
 		}else
 		{
-			vertex_pt = m_vtVertices.at(pos->second->getID());
+			//vertex_pt = m_vtVertices.at(pos->second->getID());
+			vertex_pt = pos->second;
 		}
 
 		return vertex_pt;	
@@ -234,15 +238,7 @@ double VariableGraph::get_edge_weight( const BaseVertex* source, const BaseVerte
 		return DISCONNECT;
 	}else
 	{
-		map<int, double>::const_iterator pos = 
-			m_mpEdgeCodeWeight.find(get_edge_code(source, sink));
-
-		if (pos != m_mpEdgeCodeWeight.end())
-		{
-			return pos->second;
-		}
-
-		return DISCONNECT;
+		return get_original_edge_weight(source, sink);
 	}
 }
 
@@ -287,5 +283,19 @@ void VariableGraph::get_precedent_vertices( BaseVertex* vertex, set<BaseVertex*>
 			//
 			vertex_set.insert(*pos);
 		}
+	}
+}
+
+double VariableGraph::get_original_edge_weight( const BaseVertex* source, const BaseVertex* sink )
+{
+	map<int, double>::const_iterator pos = 
+		m_mpEdgeCodeWeight.find(get_edge_code(source, sink));
+
+	if (pos != m_mpEdgeCodeWeight.end())
+	{
+		return pos->second;
+	}else
+	{
+		return DISCONNECT;
 	}
 }

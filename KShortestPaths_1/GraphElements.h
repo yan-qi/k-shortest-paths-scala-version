@@ -75,12 +75,12 @@ public:
 	// Determine priority.
 	bool operator()(const T& a, const T& b) const
 	{
-		return a.Weight() < b.Weight();
+		return a.Weight() > b.Weight();
 	}
 
 	bool operator()(const T* a, const T* b) const
 	{
-		return a->Weight() < b->Weight();
+		return a->Weight() > b->Weight();
 	}
 };
 

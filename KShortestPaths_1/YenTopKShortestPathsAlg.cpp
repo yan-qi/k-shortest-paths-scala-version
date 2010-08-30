@@ -145,10 +145,11 @@ BasePath* YenTopKShortestPathsAlg::next()
 				BaseVertex* cur_vertex = cur_path->GetVertex(j);
 				if (cur_vertex->getID() == cur_recover_vertex->getID())
 				{
-					j = path_length;
+					//j = path_length;
+					break;
 				}else
 				{
-					cost += m_pGraph->get_edge_weight(
+					cost += m_pGraph->get_original_edge_weight(
 						cur_path->GetVertex(j), cur_path->GetVertex(1+j));
 					pre_path_list.push_back(cur_vertex);
 				}

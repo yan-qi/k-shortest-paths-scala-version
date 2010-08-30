@@ -166,7 +166,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
  		if(cost_of_vertex > distance)
  		{
 			m_mpStartDistanceIndex[vertex] = distance;
-			m_mpPredecessorVertex.insert(make_pair(vertex, cur_vertex_pos->first));
+			m_mpPredecessorVertex[vertex] = cur_vertex_pos->first;
  			cost = distance;
  		}
  	}

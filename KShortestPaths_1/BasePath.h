@@ -68,6 +68,6 @@ public:
 			(*pos)->PrintOut(out_stream);
 			out_stream << "->";
 		}
-// 		out_stream << std::endl <<  "*********************************************" << std::endl;	
+ 		out_stream << std::endl <<  "*********************************************" << std::endl;	
  	}
 };
