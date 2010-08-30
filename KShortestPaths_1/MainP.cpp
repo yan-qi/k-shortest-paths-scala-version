@@ -13,8 +13,7 @@
 #include <algorithm>
 #include "GraphElements.h"
 #include "BasePath.h"
-#include "BaseGraph.h"
-#include "VariableGraph.h"
+#include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"
 
@@ -23,20 +22,21 @@ using namespace std;
 
 void testDijkstraGraph()
 {
-	VariableGraph* my_graph_pt = new VariableGraph("data/test_6_2");
+	Graph* my_graph_pt = new Graph("data/test_15");
 	DijkstraShortestPathAlg shortest_path_alg(my_graph_pt);
 	BasePath* result = 
 		shortest_path_alg.get_shortest_path(
-			my_graph_pt->get_vertex_by_ID(4), my_graph_pt->get_vertex_by_ID(5));
+			my_graph_pt->get_vertex(0), my_graph_pt->get_vertex(5));
 	result->PrintOut(cout);
 }
 
 void testYenAlg()
 {
-	VariableGraph my_graph("data/test_6_2");
+	//Graph my_graph("data/test_6_2");
+	Graph my_graph("data/test_15");
 	
-	YenTopKShortestPathsAlg yenAlg(my_graph, my_graph.get_vertex_by_ID(4), 
-		my_graph.get_vertex_by_ID(5));
+	YenTopKShortestPathsAlg yenAlg(my_graph, my_graph.get_vertex(0), 
+		my_graph.get_vertex(5));
 
 	int i=0;
 	while(yenAlg.has_next())
@@ -54,8 +54,8 @@ void testYenAlg()
 
 int main(...)
 {
-	cout << "Welcome to the real world!" << endl;
+	cout << "Welcome to the real world!" << endl;()
 
-	/*testDijkstraGraph();*/
-	testYenAlg();
+	testDijkstraGraph();
+	/*testYenAlg();*/
 }

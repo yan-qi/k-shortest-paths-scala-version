@@ -17,7 +17,7 @@
 #include <vector>
 #include "GraphElements.h"
 #include "BasePath.h"
-#include "VariableGraph.h"
+#include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 
 BasePath* DijkstraShortestPathAlg::get_shortest_path( BaseVertex* source, BaseVertex* sink )
@@ -27,9 +27,9 @@ BasePath* DijkstraShortestPathAlg::get_shortest_path( BaseVertex* source, BaseVe
 	std::vector<BaseVertex*> vertex_list;
 	std::map<BaseVertex*, double>::const_iterator pos = 
 		m_mpStartDistanceIndex.find(sink);
-	double weight = pos != m_mpStartDistanceIndex.end() ? pos->second : VariableGraph::DISCONNECT;
+	double weight = pos != m_mpStartDistanceIndex.end() ? pos->second : Graph::DISCONNECT;
 
-	if (weight < VariableGraph::DISCONNECT)
+	if (weight < Graph::DISCONNECT)
 	{
 		BaseVertex* cur_vertex_pt = sink;
 		do 
@@ -45,7 +45,6 @@ BasePath* DijkstraShortestPathAlg::get_shortest_path( BaseVertex* source, BaseVe
 
 		} while (cur_vertex_pt != source);
 
-		/*vertex_list.push_back(source);*/
 		vertex_list.insert(vertex_list.begin(), source);
 	}
 	return new BasePath(vertex_list, weight);
@@ -105,7 +104,7 @@ void DijkstraShortestPathAlg::improve2vertex( BaseVertex* cur_vertex_pt, bool is
 
 		//2.2 calculate the distance
 		map<BaseVertex*, double>::const_iterator cur_pos = m_mpStartDistanceIndex.find(cur_vertex_pt);
-		double distance =  cur_pos != m_mpStartDistanceIndex.end() ? cur_pos->second : VariableGraph::DISCONNECT;
+		double distance =  cur_pos != m_mpStartDistanceIndex.end() ? cur_pos->second : Graph::DISCONNECT;
 
 		distance += is_source2sink ? m_pDirectGraph->get_edge_weight(cur_vertex_pt, *cur_neighbor_pos) : 
 			m_pDirectGraph->get_edge_weight(*cur_neighbor_pos, cur_vertex_pt);
@@ -135,7 +134,7 @@ void DijkstraShortestPathAlg::clear()
 
 BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 {
-	double cost = VariableGraph::DISCONNECT;
+	double cost = Graph::DISCONNECT;
 
  	// 1. get the set of successors of the input vertex
 	set<BaseVertex*>* adj_vertex_set = new set<BaseVertex*>();
@@ -146,7 +145,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 	if(pos4vertexInStartDistIndex == m_mpStartDistanceIndex.end())
  	{
 		pos4vertexInStartDistIndex = 
-			(m_mpStartDistanceIndex.insert(make_pair(vertex, VariableGraph::DISCONNECT))).first;
+			(m_mpStartDistanceIndex.insert(make_pair(vertex, Graph::DISCONNECT))).first;
  	}
 
  	// 3. update the distance from the root to the input vertex if necessary
@@ -156,7 +155,7 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
  		// 3.1 get the distance from the root to one successor of the input vertex
 		map<BaseVertex*, double>::const_iterator cur_vertex_pos = m_mpStartDistanceIndex.find(*pos);
 		double distance = cur_vertex_pos == m_mpStartDistanceIndex.end() ?
-			VariableGraph::DISCONNECT : cur_vertex_pos->second;
+			Graph::DISCONNECT : cur_vertex_pos->second;
  
  		// 3.2 calculate the distance from the root to the input vertex
 		distance += m_pDirectGraph->get_edge_weight(vertex, *pos);
@@ -173,12 +172,11 @@ BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )
 
  	// 4. create the sub_path if exists
 	BasePath* sub_path = NULL;
-	if(cost < VariableGraph::DISCONNECT) 
+	if(cost < Graph::DISCONNECT) 
  	{
 		vector<BaseVertex*> vertex_list;
 		vertex_list.push_back(vertex);
 
-		//BaseVertex* sel_vertex_pt = m_mpPredecessorVertex[vertex];
 		map<BaseVertex*, BaseVertex*>::const_iterator pos4PredVertexMap =
 			m_mpPredecessorVertex.find(vertex);
 		
@@ -215,7 +213,7 @@ void DijkstraShortestPathAlg::correct_cost_backward( BaseVertex* vertex )
 			map<BaseVertex*,double>::const_iterator pos4StartDistIndexMap = 
 				m_mpStartDistanceIndex.find(*pos);
 			double cost_of_pre_vertex = m_mpStartDistanceIndex.end() == pos4StartDistIndexMap ?
-				VariableGraph::DISCONNECT : pos4StartDistIndexMap->second;
+				Graph::DISCONNECT : pos4StartDistIndexMap->second;
 
 			double fresh_cost = cost_of_cur_vertex + m_pDirectGraph->get_edge_weight(*pos, cur_vertex_pt);
 			if(cost_of_pre_vertex > fresh_cost)

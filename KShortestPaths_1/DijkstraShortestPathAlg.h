@@ -23,18 +23,17 @@ public: // types
 
 private: // members
 
-	VariableGraph* m_pDirectGraph;
+	Graph* m_pDirectGraph;
 
 	std::map<BaseVertex*, double> m_mpStartDistanceIndex; 
 	std::map<BaseVertex*, BaseVertex*> m_mpPredecessorVertex; 
 
-	//std::set<BaseVertex*, WeightComparator<BaseVertex> > m_stDeterminedVertices; // The set of vertex IDs
 	std::set<int> m_stDeterminedVertices;
 	
 	std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightComparator<BaseVertex> > m_quCandidateVertices;
 	
 public:
-	DijkstraShortestPathAlg(VariableGraph* pGraph):m_pDirectGraph(pGraph){}
+	DijkstraShortestPathAlg(Graph* pGraph):m_pDirectGraph(pGraph){}
 	~DijkstraShortestPathAlg(void){clear();}
 
 	void clear();
