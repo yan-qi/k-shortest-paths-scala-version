@@ -33,7 +33,7 @@ void testDijkstraGraph()
 void testYenAlg()
 {
 	//Graph my_graph("data/test_6_2");
-	Graph my_graph("data/test_15");
+	Graph my_graph("data/test_50");
 	
 	YenTopKShortestPathsAlg yenAlg(my_graph, my_graph.get_vertex(0), 
 		my_graph.get_vertex(5));
@@ -54,8 +54,8 @@ void testYenAlg()
 
 int main(...)
 {
-	cout << "Welcome to the real world!" << endl;()
+	cout << "Welcome to the real world!" << endl;
 
-	testDijkstraGraph();
-	/*testYenAlg();*/
+	/*testDijkstraGraph();*/
+	testYenAlg();
 }

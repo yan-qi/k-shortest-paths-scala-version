@@ -23,7 +23,7 @@
 ///  @author Yan Qi @date 5/28/2010
 ///////////////////////////////////////////////////////////////////////////////
 template<class T>
-class WeightComparator
+class WeightGreater
 {
 public:
 	// Determine priority.
@@ -35,6 +35,22 @@ public:
 	bool operator()(const T* a, const T* b) const
 	{
 		return a->Weight() > b->Weight();
+	}
+};
+
+template<class T>
+class WeightLess
+{
+public:
+	// Determine priority.
+	bool operator()(const T& a, const T& b) const
+	{
+		return a.Weight() < b.Weight();
+	}
+
+	bool operator()(const T* a, const T* b) const
+	{
+		return a->Weight() < b->Weight();
 	}
 };
 

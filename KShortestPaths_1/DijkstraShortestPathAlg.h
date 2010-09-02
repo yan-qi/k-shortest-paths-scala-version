@@ -30,7 +30,8 @@ private: // members
 
 	std::set<int> m_stDeterminedVertices;
 	
-	std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightComparator<BaseVertex> > m_quCandidateVertices;
+	//std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightGreater<BaseVertex> > m_quCandidateVertices;
+	std::multiset<BaseVertex*, WeightLess<BaseVertex> > m_quCandidateVertices;
 	
 public:
 	DijkstraShortestPathAlg(Graph* pGraph):m_pDirectGraph(pGraph){}
