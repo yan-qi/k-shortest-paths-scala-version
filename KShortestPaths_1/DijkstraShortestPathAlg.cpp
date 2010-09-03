@@ -57,7 +57,7 @@ void DijkstraShortestPathAlg::determine_shortest_paths( BaseVertex* source, Base
 	//2. initiate the local variables
 	BaseVertex* end_vertex = is_source2sink ? sink : source;
 	BaseVertex* start_vertex = is_source2sink ? source : sink;
-	m_mpStartDistanceIndex.insert(make_pair(start_vertex, 0));
+	m_mpStartDistanceIndex[start_vertex] = 0;
 	start_vertex->Weight(0);
 	//m_quCandidateVertices.push(start_vertex);
 	m_quCandidateVertices.insert(start_vertex);
@@ -74,6 +74,11 @@ void DijkstraShortestPathAlg::determine_shortest_paths( BaseVertex* source, Base
 		//if (cur_vertex_pt->getID() == end_vertex->getID()) break;
 		if (cur_vertex_pt == end_vertex) break;
 
+		if(cur_vertex_pt->getID() == 31)
+		{
+			int i = 1;
+			i = 100;
+		}
 		//m_stDeterminedVertices.insert(cur_vertex_pt);
 		m_stDeterminedVertices.insert(cur_vertex_pt->getID());
 

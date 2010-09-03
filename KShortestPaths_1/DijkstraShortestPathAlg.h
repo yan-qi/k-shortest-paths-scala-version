@@ -43,7 +43,7 @@ public:
 
 	void set_predecessor_vertex(BaseVertex* vt1, BaseVertex* vt2)
 	{
-		m_mpPredecessorVertex.insert(make_pair(vt1, vt2));
+		m_mpPredecessorVertex[vt1] = vt2;
 	}
 
 	double get_start_distance_at(BaseVertex* vertex)
@@ -53,7 +53,8 @@ public:
 
 	void set_start_distance_at(BaseVertex* vertex, double weight)
 	{
-		m_mpStartDistanceIndex.insert(make_pair(vertex, weight));
+		//m_mpStartDistanceIndex.insert(make_pair(vertex, weight));
+		m_mpStartDistanceIndex[vertex] = weight;
 	}
 
 	void get_shortest_path_flower(BaseVertex* root)

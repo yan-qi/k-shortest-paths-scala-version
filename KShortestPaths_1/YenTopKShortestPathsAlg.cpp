@@ -45,7 +45,7 @@ void YenTopKShortestPathsAlg::_init()
 		{
 			//m_quPathCandidates.push(pShortestPath);
 			m_quPathCandidates.insert(pShortestPath);
-			m_mpDerivationVertexIndex.insert(make_pair(pShortestPath, m_pSourceVertex));
+			m_mpDerivationVertexIndex[pShortestPath] = m_pSourceVertex;
 		}
 	}
 }

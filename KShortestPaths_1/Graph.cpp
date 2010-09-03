@@ -107,7 +107,7 @@ void Graph::_import_from_file( const string& input_file_name )
 
 		///3.2.2 add the edge weight
 		//// note that the duplicate edge would overwrite the one occurring before. 
-		m_mpEdgeCodeWeight.insert(make_pair(get_edge_code(start_vertex_pt, end_vertex_pt), edge_weight));
+		m_mpEdgeCodeWeight[get_edge_code(start_vertex_pt, end_vertex_pt)] = edge_weight;
 
 		///3.2.3 update the fan-in or fan-out variables
 		//// Fan-in
@@ -138,7 +138,7 @@ BaseVertex* Graph::get_vertex( int node_id )
 			int vertex_id = m_vtVertices.size();
 			vertex_pt = new BaseVertex();
 			vertex_pt->setID(node_id);
-			m_mpVertexIndex.insert(make_pair(node_id, vertex_pt));
+			m_mpVertexIndex[node_id] = vertex_pt;
 
 			m_vtVertices.push_back(vertex_pt);
 		}else
