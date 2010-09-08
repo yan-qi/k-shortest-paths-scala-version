@@ -130,8 +130,8 @@ void DijkstraShortestPathAlg::improve2vertex( BaseVertex* cur_vertex_pt, bool is
 			(*cur_neighbor_pos)->Weight(distance);
 
 			//m_quCandidateVertices.push(*cur_neighbor_pos);
-			multiset<BaseVertex*, WeightLess<BaseVertex> >::const_iterator pos = NULL;
-			for(pos = m_quCandidateVertices.begin(); pos != m_quCandidateVertices.end(); ++pos)
+			multiset<BaseVertex*, WeightLess<BaseVertex> >::const_iterator pos = m_quCandidateVertices.begin();
+			for(; pos != m_quCandidateVertices.end(); ++pos)
 			{
 				if ((*pos)->getID() == (*cur_neighbor_pos)->getID())
 				{
@@ -153,10 +153,6 @@ void DijkstraShortestPathAlg::clear()
 	m_mpPredecessorVertex.clear();
 	m_mpStartDistanceIndex.clear();
 	m_quCandidateVertices.clear();
-// 	while (!m_quCandidateVertices.empty())
-// 	{
-// 		m_quCandidateVertices.pop();
-// 	}
 }
 
 BasePath* DijkstraShortestPathAlg::update_cost_forward( BaseVertex* vertex )

@@ -13,15 +13,7 @@
 
 #include <string>
 
-///////////////////////////////////////////////////////////////////////////////
-///  WeightComparator4GVertex
-///		The comparator is for the comparison of vertices of the graph, 
-///     in terms of their weights. 
-///
-///  @remarks <TODO: insert remarks here>
-///
-///  @author Yan Qi @date 5/28/2010
-///////////////////////////////////////////////////////////////////////////////
+
 template<class T>
 class WeightGreater
 {
