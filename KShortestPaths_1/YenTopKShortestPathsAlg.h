@@ -21,7 +21,6 @@ class YenTopKShortestPathsAlg
 
 	vector<BasePath*> m_vResultList;
 	map<BasePath*, BaseVertex*> m_mpDerivationVertexIndex;
-	//priority_queue<BasePath*, std::vector<BasePath*>, WeightGreater<BasePath> > m_quPathCandidates;
 	multiset<BasePath*, WeightLess<BasePath> > m_quPathCandidates;
 
 	BaseVertex* m_pSourceVertex;

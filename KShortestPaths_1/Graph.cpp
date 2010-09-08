@@ -18,7 +18,6 @@
 #include <iostream>
 #include <algorithm>
 #include "GraphElements.h"
-#include "BasePath.h"
 #include "Graph.h"
 
 
@@ -101,7 +100,6 @@ void Graph::_import_from_file( const string& input_file_name )
 		ifs >> edge_weight;
 
 		///3.2.1 construct the vertices
-		/*GIntVertex* start_vertex_pt = new GIntVertex(start_vertex);*/
 		BaseVertex* start_vertex_pt = get_vertex(start_vertex);
 		BaseVertex* end_vertex_pt = get_vertex(end_vertex);
 

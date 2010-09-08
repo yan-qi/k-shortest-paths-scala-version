@@ -17,10 +17,6 @@ using namespace std;
 
 class DijkstraShortestPathAlg
 {
-public: // types
-
-	//typedef GVertex<T> BaseVertex;
-
 private: // members
 
 	Graph* m_pDirectGraph;
@@ -30,7 +26,6 @@ private: // members
 
 	std::set<int> m_stDeterminedVertices;
 	
-	//std::priority_queue<BaseVertex*, std::vector<BaseVertex*>, WeightGreater<BaseVertex> > m_quCandidateVertices;
 	std::multiset<BaseVertex*, WeightLess<BaseVertex> > m_quCandidateVertices;
 	
 public:
@@ -53,7 +48,6 @@ public:
 
 	void set_start_distance_at(BaseVertex* vertex, double weight)
 	{
-		//m_mpStartDistanceIndex.insert(make_pair(vertex, weight));
 		m_mpStartDistanceIndex[vertex] = weight;
 	}
 

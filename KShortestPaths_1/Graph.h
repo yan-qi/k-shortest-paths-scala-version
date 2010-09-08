@@ -24,7 +24,6 @@ public:
 	void PrintOut(std::ostream& out_stream) const
 	{
 		out_stream << "Cost: " << m_dWeight << " Length: " << m_vtVertexList.size() << std::endl;
-		//std::copy(m_vtVertexList.begin(), m_vtVertexList.end(), std::ostream_iterator<int>(out_stream, " "));
 		for(std::vector<BaseVertex*>::const_iterator pos=m_vtVertexList.begin(); pos!=m_vtVertexList.end();++pos)
 		{
 			out_stream << (*pos)->getID() << " ";
@@ -81,7 +80,6 @@ public:
 	/// Methods for changing graph
 	void remove_edge(const pair<int,int> edge)
 	{
-		//m_stRemovedEdge.erase(m_stRemovedEdge.find(edge));
 		m_stRemovedEdge.insert(edge);
 	}
 

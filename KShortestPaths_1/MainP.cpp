@@ -12,7 +12,6 @@
 #include <iostream>
 #include <algorithm>
 #include "GraphElements.h"
-#include "BasePath.h"
 #include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"
@@ -43,7 +42,6 @@ void testYenAlg()
 	{
 		++i;
 		yenAlg.next()->PrintOut(cout);
-		//System.out.println("Path "+i+++" : "+yenAlg.next());
 	}
 
 // 	System.out.println("Result # :"+i);

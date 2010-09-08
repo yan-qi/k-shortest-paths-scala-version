@@ -16,7 +16,6 @@
 #include <queue>
 #include <vector>
 #include "GraphElements.h"
-#include "BasePath.h"
 #include "Graph.h"
 #include "DijkstraShortestPathAlg.h"
 #include "YenTopKShortestPathsAlg.h"
@@ -29,10 +28,6 @@ void YenTopKShortestPathsAlg::clear()
 	m_mpDerivationVertexIndex.clear();
 	m_vResultList.clear();
 	m_quPathCandidates.clear();
-// 	while (!m_quPathCandidates.empty())
-// 	{
-// 		m_quPathCandidates.pop();
-// 	}
 }
 
 void YenTopKShortestPathsAlg::_init()
@@ -43,7 +38,6 @@ void YenTopKShortestPathsAlg::_init()
 		BasePath* pShortestPath = get_shortest_path(m_pSourceVertex, m_pTargetVertex);
 		if (pShortestPath != NULL && pShortestPath->length() > 1)
 		{
-			//m_quPathCandidates.push(pShortestPath);
 			m_quPathCandidates.insert(pShortestPath);
 			m_mpDerivationVertexIndex[pShortestPath] = m_pSourceVertex;
 		}
@@ -169,9 +163,7 @@ BasePath* YenTopKShortestPathsAlg::next()
 			//4.4.3 Put it in the candidate pool if new
 			if (m_mpDerivationVertexIndex.find(sub_path) == m_mpDerivationVertexIndex.end())
 			{
-				//m_quPathCandidates.push(sub_path);
 				m_quPathCandidates.insert(sub_path);
-				//m_mpDerivationVertexIndex.insert(make_pair(sub_path, cur_recover_vertex));
 				m_mpDerivationVertexIndex[sub_path] = cur_recover_vertex;
 			}
 		}
