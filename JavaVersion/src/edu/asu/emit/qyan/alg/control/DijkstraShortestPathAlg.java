@@ -148,6 +148,11 @@ public class DijkstraShortestPathAlg
 
 			if(cur_candidate.equals(end_vertex)) break;
 
+			if(cur_candidate.get_id() == 31)
+			{
+				int i = 1;
+				i = 100;
+			}
 			_determined_vertex_set.add(cur_candidate);
 
 			_improve_to_vertex(cur_candidate, is_source2sink);

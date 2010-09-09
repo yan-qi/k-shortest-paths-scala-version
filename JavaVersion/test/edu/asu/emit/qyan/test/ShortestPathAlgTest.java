@@ -53,7 +53,7 @@ public class ShortestPathAlgTest
 	public void setUp() throws Exception
 	{
 		// Import the graph from a file
-		graph = new Graph("data/test_50");
+		graph = new Graph("data/test_15");
 	}
 
 	@Test
@@ -61,6 +61,6 @@ public class ShortestPathAlgTest
 	{
 		System.out.println("Testing Dijkstra Algorithm.");
 		DijkstraShortestPathAlg alg = new DijkstraShortestPathAlg(graph);
-		System.out.println(alg.get_shortest_path(graph.get_vertex(0), graph.get_vertex(38)));
+		System.out.println(alg.get_shortest_path(graph.get_vertex(0), graph.get_vertex(5)));
 	}
 }

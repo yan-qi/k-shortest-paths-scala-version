@@ -50,7 +50,7 @@ public class YenTopKShortestPathsAlgTest
 {
 	// The graph should be initiated only once to guarantee the correspondence 
 	// between vertex id and node id in input text file. 
-	static Graph graph = new VariableGraph("data/test_6_2");
+	static Graph graph = new VariableGraph("data/test_15");
 	
 //	@Test
 	public void testDijkstraShortestPathAlg()
@@ -71,12 +71,12 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println(yenAlg.get_result_list().size());	
 	}
 	
-//	@Test
+	@Test
 	public void testYenShortestPathsAlg2()
 	{
 		System.out.println("Obtain all paths in increasing order! - updated!");
 		YenTopKShortestPathsAlg yenAlg = new YenTopKShortestPathsAlg(
-				graph, graph.get_vertex(4), graph.get_vertex(5));
+				graph, graph.get_vertex(0), graph.get_vertex(5));
 		int i=0;
 		while(yenAlg.has_next())
 		{
@@ -88,7 +88,7 @@ public class YenTopKShortestPathsAlgTest
 		System.out.println("All generated : "+yenAlg.get_generated_path_size());
 	}
 	
-	@Test
+//	@Test
 	public void testYenShortestPathsAlg4MultipleGraphs()
 	{
 		System.out.println("Graph 1 - ");
