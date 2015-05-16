@@ -17,3 +17,5 @@ Yen’s algorithm is one of derivation algorithms for ranking the K shortest pat
   * A bug is fixed in the Java implementation. The algorithm presented in Reference `[`1`]` is not always right. Specifically, the test case with the graph (see 'test\_6\_1' in the source package) can not return all results if the algorithm is applied.
   * A fix on the comparator associated with Class QYDirectedPath is provided for the CPP implementation. Thanks a lot to timothyahahn.
   * The implementation of top-k shortest path algorithm in **C#** by Vinh Bui (vinhqb@gmail.com) is added. Note that I won't test this code completely.
+
+## Please check the implementations in Java/C+++ at [here](http://thinkingscale.com/k-shortest-paths-cpp-version/)
