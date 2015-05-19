@@ -43,9 +43,10 @@ class WeightedDirectedGraph {
   private val fanOutIndexMap = Map[Node, Set[Node]]()
   private val fanInIndexMap = Map[Node, Set[Node]]()
 
-  def fanOut(node: Node) = fanOutIndexMap.get(node).getOrElse(Set[Node]())
-  def fanIn(node: Node) = fanInIndexMap.get(node).getOrElse(Set[Node]())
-  def edge(start: Node, end: Node) = edgeIndexMap.get((start, end)
+  def fanOut(node: Node) = fanOutIndexMap.get(node).getOrElse(Set.empty)
+  def fanIn(node: Node) = fanInIndexMap.get(node).getOrElse(Set.empty)
+  def edge(start: Node, end: Node) = edgeIndexMap.get((start, end))
+  def node(id: Int) = nodeIndexMap.get(id).get
 
   def addNode(node: Node): Node = {
     require(!nodeIndexMap.contains(node.id), node.id + " in " + nodeIndexMap) // necessary?
@@ -83,9 +84,23 @@ class WeightedDirectedGraph {
   }
 }
 
-class ChangableWeightedDirectedGraph(graph: WeightedDirectedGraph) extends  WeightedDirectedGraph {
+class ChangableWeightedDirectedGraph extends  WeightedDirectedGraph {
+
   private val removedNodeSet = Set[Node]()
   private val removedEdgeSet = Set[(Node, Node)]()
 
-  @override def fanIn(node: Node) = super.fanIn(node).get.diff(removedNodeSet)
+  def remove(node: Node) = { removedNodeSet += node }
+  def remove(edge: (Node,Node)) = { removedEdgeSet += edge }
+
+  def recover(node: Node) = { removedNodeSet -= node }
+  def recover(edge: (Node, Node)) = { removedEdgeSet -= edge }
+  def recover() = { removedEdgeSet.clear(); removedNodeSet.clear() }
+
+  override def fanIn(node: Node) = if (removedNodeSet.contains(node)) Set.empty else
+    super.fanIn(node).diff(removedNodeSet).filterNot(pre => removedEdgeSet.contains((pre, node)))
+
+  override def fanOut(node: Node) = if (removedNodeSet.contains(node)) Set.empty else
+    super.fanOut(node).diff(removedNodeSet).filterNot(next => removedEdgeSet.contains(node, next))
+
+  override def edge(start: Node, end: Node) = if (removedEdgeSet.contains((start, end))) None else super.edge(start, end)
 }

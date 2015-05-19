@@ -91,6 +91,16 @@ class ShortestPath(graph: WeightedDirectedGraph) {
   }
 
   /**
+   * Construct a flower rooted at "root" with
+   * the shortest paths from the other vertices.
+   *
+   * @param root
+   */
+  def getShortestPathFlowerRootAt(root: Node) {
+    determineShortestPaths(null, root, true)
+  }
+
+  /**
    * Correct costs of successors of the input vertex using backward star form.
    * (FLOWER)
    * @param node
@@ -109,7 +119,7 @@ class ShortestPath(graph: WeightedDirectedGraph) {
 
   def correctCostForward(node: Node) = {
     var cost = Double.MaxValue
-    graph.fanOut(node).get.filter(startVertexDistanceIndex.contains(_)).foreach(next => {
+    graph.fanOut(node).filter(startVertexDistanceIndex.contains(_)).foreach(next => {
       val newWeight = graph.edge(node, next).get.getWeight + startVertexDistanceIndex.get(next).get
       if (startVertexDistanceIndex.get(node).getOrElse(Double.MaxValue) >  newWeight) {
         startVertexDistanceIndex.put(node, newWeight)

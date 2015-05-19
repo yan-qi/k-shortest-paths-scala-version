@@ -45,4 +45,10 @@ class GraphSuite extends FunSuite {
     val shortestPath = new ShortestPath(g)
     println(shortestPath.getShortestPath(n1, n2))
   }
+
+  test("Find the top k shortest paths in a graph") {
+    val graph = TopKShortestPaths.importGraph("data/test_6_2")
+    println(graph)
+    TopKShortestPaths.find(graph, graph.node(4), graph.node(5), 100)
+  }
 }
