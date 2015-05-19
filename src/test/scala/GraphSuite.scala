@@ -42,7 +42,7 @@ class GraphSuite extends FunSuite {
     ppq += p1
     println(ppq)
 
-    val shortestPath = new FindShortestPath(g)
+    val shortestPath = new ShortestPath(g)
     println(shortestPath.getShortestPath(n1, n2))
   }
 }

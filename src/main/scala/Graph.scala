@@ -38,43 +38,54 @@ class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
 
 class WeightedDirectedGraph {
 
-  val nodeIndex = Map[Int, Node]()
-  val edgeIndex = Map[(Node, Node), Edge]()
-  val fanOutIndex = Map[Node, Set[Node]]()
-  val fanInIndex = Map[Node, Set[Node]]()
+  private val nodeIndexMap = Map[Int, Node]()
+  private val edgeIndexMap = Map[(Node, Node), Edge]()
+  private val fanOutIndexMap = Map[Node, Set[Node]]()
+  private val fanInIndexMap = Map[Node, Set[Node]]()
+
+  def fanOut(node: Node) = fanOutIndexMap.get(node).getOrElse(Set[Node]())
+  def fanIn(node: Node) = fanInIndexMap.get(node).getOrElse(Set[Node]())
+  def edge(start: Node, end: Node) = edgeIndexMap.get((start, end)
 
   def addNode(node: Node): Node = {
-    require(!nodeIndex.contains(node.id), node.id + " in " + nodeIndex) // necessary?
-    nodeIndex(node.id) = node
+    require(!nodeIndexMap.contains(node.id), node.id + " in " + nodeIndexMap) // necessary?
+    nodeIndexMap(node.id) = node
     node
   }
 
   def addEdge(start: Node, end: Node): Edge = {
-    if (!nodeIndex.contains(start.id)) {
+    if (!nodeIndexMap.contains(start.id)) {
       addNode(start)
     }
 
-    if (!nodeIndex.contains(end.id)) {
+    if (!nodeIndexMap.contains(end.id)) {
       addNode(end)
     }
 
-    if (fanInIndex.contains(end)) {
-      fanInIndex(end) += start
+    if (fanInIndexMap.contains(end)) {
+      fanInIndexMap(end) += start
     }
     else {
       var idList = Set[Node]()
       idList += start
-      fanInIndex.put(end, idList)
+      fanInIndexMap.put(end, idList)
     }
-    if (fanOutIndex.contains(start)) {
-      fanOutIndex(start) += end
+    if (fanOutIndexMap.contains(start)) {
+      fanOutIndexMap(start) += end
     } else {
       var idList = Set[Node]()
       idList += end
-      fanOutIndex.put(start, idList)
+      fanOutIndexMap.put(start, idList)
     }
     val edge = new Edge(start, end)
-    edgeIndex.put((start, end), edge)
+    edgeIndexMap.put((start, end), edge)
     edge
   }
+}
+
+class ChangableWeightedDirectedGraph(graph: WeightedDirectedGraph) extends  WeightedDirectedGraph {
+  private val removedNodeSet = Set[Node]()
+  private val removedEdgeSet = Set[(Node, Node)]()
+
+  @override def fanIn(node: Node) = super.fanIn(node).get.diff(removedNodeSet)
 }
