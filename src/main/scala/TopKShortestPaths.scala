@@ -52,18 +52,18 @@ class TopKShortestPaths(graph: ChangableWeightedDirectedGraph) {
       val nextPath = pathCandidates.dequeue()
       val nextDerivatedNode = pathDerivationNodeIndex.get(nextPath).get
       val nextDerivatedNodeSeq = nextPath.nodeList.indexOf(nextDerivatedNode)
-      val nextSubPathNodeList: List[Node] = nextPath.nodeList.dropRight(nextPath.nodeList.size - nextDerivatedNodeSeq)
+      val nextSubPathNodeList: List[Node] = nextPath.nodeList.dropRight(nextPath.nodeList.size - nextDerivatedNodeSeq - 1)
 
       paths.filter(path =>
           path.nodeList.contains(nextDerivatedNode) &&
-          path.nodeList.dropRight(path.nodeList.size - path.nodeList.indexOf(nextDerivatedNode)) == nextSubPathNodeList).
+          path.nodeList.dropRight(path.nodeList.size - path.nodeList.indexOf(nextDerivatedNode) - 1) == nextSubPathNodeList).
         foreach(path =>
           graph.remove((nextDerivatedNode, path.nodeList(path.nodeList.indexOf(nextDerivatedNode) + 1)))
       )
 
-      for (nodeSeq <- 0 until nextSubPathNodeList.size-1) {
-        graph.remove(nextSubPathNodeList(nodeSeq))
-        graph.remove((nextSubPathNodeList(nodeSeq), nextSubPathNodeList(nodeSeq+1)))
+      for (nodeSeq <- 0 until nextPath.nodeList.length - 1) {
+        graph.remove(nextPath.nodeList(nodeSeq))
+        graph.remove((nextPath.nodeList(nodeSeq), nextPath.nodeList(nodeSeq+1)))
       }
 
       //2. recover from the very ending and calculate the few more candidates
@@ -72,7 +72,7 @@ class TopKShortestPaths(graph: ChangableWeightedDirectedGraph) {
       findShortestPath.getShortestPathFlowerRootAt(end)
 
       //2.2 recover the deleted vertices and update the cost and identify the new candidate results
-      for (nodeSeq <- nextPath.nodeList.size-2 to nextDerivatedNodeSeq by -1) {
+      for (nodeSeq <- nextPath.nodeList.size-2 to nextDerivatedNodeSeq by -1 if nodeSeq>=0) {
         val recoveredNode = nextPath.nodeList(nodeSeq)
         graph.recover(recoveredNode)
 
@@ -80,12 +80,12 @@ class TopKShortestPaths(graph: ChangableWeightedDirectedGraph) {
           case None =>
           case Some(subPath) => {
             findShortestPath.correctCostBackward(recoveredNode)
-            val prefix = nextPath.nodeList.dropRight(nextPath.nodeList.size-nodeSeq)
+            val prefix = nextPath.nodeList.dropRight(nextPath.nodeList.size-nodeSeq-1)
             var cost = 0.0
-            for (i <- 0 to prefix.size) {
-              cost += graph.edge(prefix(i), prefix(1+i)).get.getWeight
+            for (i <- 0 until prefix.size-1) {
+              cost += graph.edgeOriginalWeight(prefix(i), prefix(1+i))
             }
-            val newPath = new Path(prefix ::: subPath.nodeList)
+            val newPath = new Path(prefix.dropRight(1) ::: subPath.nodeList)
             newPath.setWeight(cost + subPath.getWeight)
 
             if (!pathDerivationNodeIndex.contains(newPath)) {
@@ -100,8 +100,8 @@ class TopKShortestPaths(graph: ChangableWeightedDirectedGraph) {
         graph.recover((recoveredNode, nextNode))
 
         //2.4 update cost if necessary
-        val newCost = graph.edge(recoveredNode, nextNode).get.getWeight + findShortestPath.startVertexDistanceIndex.get(nextNode).getOrElse(Double.MaxValue)
-        if (findShortestPath.startVertexDistanceIndex.get(recoveredNode).getOrElse(Double.MaxValue) > newCost) {
+        val newCost = graph.edgeWeight(recoveredNode, nextNode) + findShortestPath.startVertexDistanceIndex.get(nextNode).getOrElse(Double.MaxValue)
+        if (findShortestPath.startVertexDistanceIndex.get(recoveredNode).getOrElse(Double.MaxValue) > newCost && newCost < Double.MaxValue) {
           findShortestPath.startVertexDistanceIndex.put(recoveredNode, newCost)
           findShortestPath.predecessorIndex.put(recoveredNode, nextNode)
           findShortestPath.correctCostBackward(recoveredNode)
@@ -127,7 +127,7 @@ object TopKShortestPaths {
     val pattern2 = "([0-9]+)".r
     for(line <- Source.fromFile(fileName).getLines().filterNot(_.trim.isEmpty)) {
       line match {
-        case pattern(start, end, weight) => graph.addEdge(new Node(start.toInt), new Node(end.toInt)).setWeight(weight.toDouble)
+        case pattern(start, end, weight) => graph.addEdge(new Node(start.toInt), new Node(end.toInt), weight.toDouble)
         case pattern2(number) =>
         case _ =>
       }
@@ -135,10 +135,9 @@ object TopKShortestPaths {
     graph
   }
 
-  def find(graph: ChangableWeightedDirectedGraph, start: Node, end: Node, k: Int): Unit = {
-    val finder = new TopKShortestPaths(graph);
-    val results = finder.findPaths(start, end, k)
-    results.foreach(println)
+  def find(graph: ChangableWeightedDirectedGraph, start: Node, end: Node, k: Int) = {
+    val finder = new TopKShortestPaths(graph)
+    finder.findPaths(start, end, k)
   }
 
 }

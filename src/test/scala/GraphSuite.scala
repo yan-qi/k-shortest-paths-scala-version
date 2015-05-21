@@ -20,7 +20,7 @@ class GraphSuite extends FunSuite {
     n2.setWeight(0.2)
     val n3 = g.addNode(new Node(3))
     n3.setWeight(0.03)
-    g.addEdge(n1, n2).setWeight(7)
+    g.addEdge(n1, n2, 7)
 
     val pq = new mutable.PriorityQueue[Node]()
     pq += n1
@@ -48,7 +48,6 @@ class GraphSuite extends FunSuite {
 
   test("Find the top k shortest paths in a graph") {
     val graph = TopKShortestPaths.importGraph("data/test_6_2")
-    println(graph)
-    TopKShortestPaths.find(graph, graph.node(4), graph.node(5), 100)
+    TopKShortestPaths.find(graph, graph.node(4), graph.node(5), 100).foreach(println)
   }
 }

@@ -46,10 +46,11 @@ class ShortestPath(graph: WeightedDirectedGraph) {
   }
 
   private def getReversePath(sink: Node): ListBuffer[Node] = {
-    if (predecessorIndex.isEmpty) ListBuffer[Node](sink) else {
-      predecessorIndex.get(sink) match {
-        case Some(pre) => val rel = getReversePath(pre); rel.prepend(pre); rel
-        case None => throw new RuntimeException // impossible
+    predecessorIndex.get(sink) match {
+      case Some(pre) => {
+        val rel = getReversePath(pre); rel.prepend(sink); rel}
+      case None => {
+        ListBuffer[Node](sink)
       }
     }
   }
@@ -63,9 +64,9 @@ class ShortestPath(graph: WeightedDirectedGraph) {
 
       neighborSet.filter(!determinedVertexSet.contains(_)).foreach(next => {
 
-        val edgeWeight = if (isOpposite) graph.edge(next, node).get.getWeight
+        val edgeWeight = if (isOpposite) graph.edgeWeight(next, node)
         else
-          graph.edge(node, next).get.getWeight
+          graph.edgeWeight(node, next)
         val curDistance = if (startVertexDistanceIndex.contains(node)) startVertexDistanceIndex.get(node).get else Double.MaxValue - edgeWeight
         val distance = curDistance + edgeWeight
         if (!startVertexDistanceIndex.contains(next) ||
@@ -107,7 +108,7 @@ class ShortestPath(graph: WeightedDirectedGraph) {
    */
   def correctCostBackward(node: Node): Unit = {
     graph.fanIn(node).foreach(pre => {
-      val newWeight = graph.edge(pre, node).get.getWeight + startVertexDistanceIndex.get(node).get
+      val newWeight = graph.edgeWeight(pre, node) + startVertexDistanceIndex.get(node).get
       val oldWeight = startVertexDistanceIndex.get(pre).getOrElse(Double.MaxValue)
       if (oldWeight > newWeight) {
         startVertexDistanceIndex.put(pre, newWeight)
@@ -120,7 +121,7 @@ class ShortestPath(graph: WeightedDirectedGraph) {
   def correctCostForward(node: Node) = {
     var cost = Double.MaxValue
     graph.fanOut(node).filter(startVertexDistanceIndex.contains(_)).foreach(next => {
-      val newWeight = graph.edge(node, next).get.getWeight + startVertexDistanceIndex.get(next).get
+      val newWeight = graph.edgeWeight(node, next) + startVertexDistanceIndex.get(next).get
       if (startVertexDistanceIndex.get(node).getOrElse(Double.MaxValue) >  newWeight) {
         startVertexDistanceIndex.put(node, newWeight)
         predecessorIndex.put(node, next)
