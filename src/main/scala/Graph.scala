@@ -19,7 +19,7 @@ trait Weight {
  */
 class Node(val id: Int) extends Weight with Ordered[Node] {
 
-  override def toString:String = id.toString //+ "[" + weight + "]"
+  override def toString:String = id.toString
 
   override def compare(that: Node): Int =
     if (this.getWeight - that.getWeight < 0)
@@ -52,6 +52,7 @@ class Node(val id: Int) extends Weight with Ordered[Node] {
  * @param nodeList
  */
 class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
+
   override def compare(that: Path): Int =
     if (this.getWeight - that.getWeight < 0)
       1
@@ -59,8 +60,8 @@ class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
       -1
     else
       0
-  override def toString = nodeList.toString() + "[" + this.getWeight + "]"
 
+  override def toString = nodeList.toString() + "[" + this.getWeight + "]"
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Path]
 
@@ -145,7 +146,7 @@ class ChangableWeightedDirectedGraph extends  WeightedDirectedGraph {
 
   override def edgeWeight(start: Node, end: Node) = if (removedEdgeSet.contains((start, end))) Double.MaxValue else super.edgeWeight(start, end)
 
-  override def edge = super.edge.diff(removedEdgeSet)
+  override def edge = super.edge.--(removedEdgeSet)
 
   def edgeOriginalWeight(start: Node, end: Node) = super.edgeWeight(start, end)
 

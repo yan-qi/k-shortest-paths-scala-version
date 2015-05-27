@@ -1,5 +1,6 @@
 package algorithm.graph
 
+import scala.annotation.tailrec
 import scala.collection.mutable._
 
 /**
@@ -45,16 +46,17 @@ class ShortestPath(graph: WeightedDirectedGraph) {
     }
   }
 
-  private def getReversePath(sink: Node): ListBuffer[Node] = {
+
+  @tailrec
+  private def getReversePath(sink: Node, list: ListBuffer[Node]): ListBuffer[Node] = {
+    list.append(sink)
     predecessorIndex.get(sink) match {
-      case Some(pre) => {
-        val rel = getReversePath(pre); rel.prepend(sink); rel}
-      case None => {
-        ListBuffer[Node](sink)
-      }
+      case Some(pre) => getReversePath(pre, list)
+      case None => list
     }
   }
 
+  @tailrec
   private def updateVertex (end: Node, isOpposite: Boolean): Unit = {
     if (vertexCandidateQueue.isEmpty) return
     val node = vertexCandidateQueue.dequeue()
@@ -62,15 +64,14 @@ class ShortestPath(graph: WeightedDirectedGraph) {
       determinedVertexSet += node
       val neighborSet = if (isOpposite) graph.fanIn(node) else graph.fanOut(node)
 
-      neighborSet.filter(!determinedVertexSet.contains(_)).foreach(next => {
+      neighborSet.filterNot(determinedVertexSet.contains(_)).foreach(next => {
 
-        val edgeWeight = if (isOpposite) graph.edgeWeight(next, node)
-        else
-          graph.edgeWeight(node, next)
-        val curDistance = if (startVertexDistanceIndex.contains(node)) startVertexDistanceIndex.get(node).get else Double.MaxValue - edgeWeight
+        val edgeWeight = if (isOpposite) graph.edgeWeight(next, node) else graph.edgeWeight(node, next)
+        val curDistance = startVertexDistanceIndex.get(node).getOrElse(Double.MaxValue - edgeWeight)
         val distance = curDistance + edgeWeight
         if (!startVertexDistanceIndex.contains(next) ||
           startVertexDistanceIndex.get(next).get > distance) {
+
           startVertexDistanceIndex.put(next, distance)
           predecessorIndex.put(next, node)
           next.setWeight(distance)
@@ -135,7 +136,7 @@ class ShortestPath(graph: WeightedDirectedGraph) {
     correctCostForward(source) match {
       case Double.MaxValue => None
       case cost => {
-        val path = new Path(getReversePath(source).toList)
+        val path = new Path(getReversePath(source, ListBuffer()).toList)
         path.setWeight(cost)
         Option(path)
       }
