@@ -8,21 +8,25 @@ import algorithm.graph._
  * Created by yqi on 5/6/2015.
  */
 class GraphSuite extends FunSuite {
+
   test("Validate the usage of set in Graph") {
+    type Node = INode[Int]
+    type Path = IPath[Int]
+
     val vertexSet = Set(1, 2, 3)
     assert(vertexSet(10) == false)
 
     val rand = scala.util.Random
-    val g = new WeightedDirectedGraph
-    val n1 = g.addNode(new Node(1))
+    val g = new WeightedDirectedGraph[Int]
+    val n1 = g.addNode(1)
     n1.setWeight(1.1)
-    val n2 = g.addNode(new Node(2))
+    val n2 = g.addNode(2)
     n2.setWeight(0.2)
-    val n3 = g.addNode(new Node(3))
+    val n3 = g.addNode(3)
     n3.setWeight(0.03)
     g.addEdge(n1, n2, 7)
 
-    val pq = new mutable.PriorityQueue[Node]()
+    val pq = new mutable.PriorityQueue[INode[Int]]()
     pq += n1
     pq += n2
     pq += n3
@@ -48,6 +52,6 @@ class GraphSuite extends FunSuite {
 
   test("Find the top k shortest paths in a graph") {
     val graph = TopKShortestPaths.importGraph("data/test_6_2")
-    TopKShortestPaths.find(graph, graph.node(4), graph.node(5), 100).foreach(println)
+    TopKShortestPaths.find(graph, 4, 5, 100).foreach(println)
   }
 }

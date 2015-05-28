@@ -1,39 +1,44 @@
 package algorithm.graph
 
 import scala.annotation.tailrec
-import scala.collection.mutable._
+import scala.collection.mutable.ListBuffer
+
 
 /**
  * An implementation of Dijkstra Shortest Path Algorithm
  * However it is changed to support an efficient implementation of
  * the top-k shortest paths algorithm
  *
- * @param graph
+ * @param graph a weighted directed graph
  */
-class ShortestPath(graph: WeightedDirectedGraph) {
+class ShortestPath[T](graph: WeightedDirectedGraph[T]) {
 
-  val determinedVertexSet = Set[Node]()
-  val vertexCandidateQueue = PriorityQueue[Node]()
-  val startVertexDistanceIndex = Map[Node,Double]()
-  val predecessorIndex = Map[Node,Node]()
+  type Node = INode[T]
+  type Path = IPath[T]
+
+  val determinedVertexSet = collection.mutable.Set[Node]()
+  val vertexCandidateQueue = collection.mutable.PriorityQueue[Node]()
+  val startVertexDistanceIndex = collection.mutable.Map[Node,Double]()
+  val predecessorIndex = collection.mutable.Map[Node,Node]()
 
   def clear(): Unit = {
-    determinedVertexSet.clear
-    vertexCandidateQueue.clear
-    startVertexDistanceIndex.clear
-    predecessorIndex.clear
+    determinedVertexSet.clear()
+    vertexCandidateQueue.clear()
+    startVertexDistanceIndex.clear()
+    predecessorIndex.clear()
   }
 
   def getShortestPath(source: Node, sink: Node): Option[Path] = {
 
-    determineShortestPaths(source, sink, false)
+    val isOppositeDirection = false
+    determineShortestPaths(source, sink, isOppositeDirection)
 
     if (startVertexDistanceIndex.contains(sink)) {
       val path = new Path(getPath(source, sink).toList)
       path.setWeight(startVertexDistanceIndex.get(sink).get)
       Option(path)
     } else {
-      return None
+      None
     }
   }
 
@@ -64,10 +69,10 @@ class ShortestPath(graph: WeightedDirectedGraph) {
       determinedVertexSet += node
       val neighborSet = if (isOpposite) graph.fanIn(node) else graph.fanOut(node)
 
-      neighborSet.filterNot(determinedVertexSet.contains(_)).foreach(next => {
+      neighborSet.filterNot(determinedVertexSet.contains).foreach(next => {
 
         val edgeWeight = if (isOpposite) graph.edgeWeight(next, node) else graph.edgeWeight(node, next)
-        val curDistance = startVertexDistanceIndex.get(node).getOrElse(Double.MaxValue - edgeWeight)
+        val curDistance = startVertexDistanceIndex.getOrElse(node, Double.MaxValue - edgeWeight)
         val distance = curDistance + edgeWeight
         if (!startVertexDistanceIndex.contains(next) ||
           startVertexDistanceIndex.get(next).get > distance) {
@@ -83,7 +88,7 @@ class ShortestPath(graph: WeightedDirectedGraph) {
   }
 
   private def determineShortestPaths (s: Node, e: Node, isOpposite: Boolean): Unit = {
-    clear
+    clear()
     val end = if (isOpposite) s else e
     val start = if (isOpposite) e else s
     startVertexDistanceIndex.put(start, 0d)
@@ -96,21 +101,22 @@ class ShortestPath(graph: WeightedDirectedGraph) {
    * Construct a flower rooted at "root" with
    * the shortest paths from the other vertices.
    *
-   * @param root
+   * @param root the node as the root
    */
-  def getShortestPathFlowerRootAt(root: Node) {
-    determineShortestPaths(null, root, true)
+  def findShortestPathFlowerRootAt(root: Node): Unit = {
+    val isOppositeDirection = true
+    determineShortestPaths(null, root, isOppositeDirection)
   }
 
   /**
    * Correct costs of successors of the input vertex using backward star form.
    * (FLOWER)
-   * @param node
+   * @param node the input node to start with
    */
   def correctCostBackward(node: Node): Unit = {
     graph.fanIn(node).foreach(pre => {
       val newWeight = graph.edgeWeight(pre, node) + startVertexDistanceIndex.get(node).get
-      val oldWeight = startVertexDistanceIndex.get(pre).getOrElse(Double.MaxValue)
+      val oldWeight = startVertexDistanceIndex.getOrElse(pre, Double.MaxValue)
       if (oldWeight > newWeight) {
         startVertexDistanceIndex.put(pre, newWeight)
         predecessorIndex.put(pre, node)
@@ -119,11 +125,11 @@ class ShortestPath(graph: WeightedDirectedGraph) {
     })
   }
 
-  def correctCostForward(node: Node) = {
+  def correctCostForward(node: Node): Double = {
     var cost = Double.MaxValue
-    graph.fanOut(node).filter(startVertexDistanceIndex.contains(_)).foreach(next => {
+    graph.fanOut(node).filter(startVertexDistanceIndex.contains).foreach(next => {
       val newWeight = graph.edgeWeight(node, next) + startVertexDistanceIndex.get(next).get
-      if (startVertexDistanceIndex.get(node).getOrElse(Double.MaxValue) >  newWeight) {
+      if (startVertexDistanceIndex.getOrElse(node, Double.MaxValue) >  newWeight) {
         startVertexDistanceIndex.put(node, newWeight)
         predecessorIndex.put(node, next)
         cost = newWeight
@@ -135,11 +141,10 @@ class ShortestPath(graph: WeightedDirectedGraph) {
   def getSubShortestPath(source: Node): Option[Path] = {
     correctCostForward(source) match {
       case Double.MaxValue => None
-      case cost => {
+      case cost =>
         val path = new Path(getReversePath(source, ListBuffer()).toList)
         path.setWeight(cost)
         Option(path)
-      }
     }
   }
 

@@ -15,13 +15,13 @@ trait Weight {
 
 /**
  * The node in the graph which is identified with an integer
- * @param id
+ * @param id The original node
  */
-class Node(val id: Int) extends Weight with Ordered[Node] {
+class INode[T](val id: T) extends Weight with Ordered[INode[T]] {
 
   override def toString:String = id.toString
 
-  override def compare(that: Node): Int =
+  override def compare(that: INode[T]): Int =
     if (this.getWeight - that.getWeight < 0)
       1
     else if (this.getWeight - that.getWeight > 0)
@@ -30,10 +30,10 @@ class Node(val id: Int) extends Weight with Ordered[Node] {
       0
 
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[Node]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[INode[T]]
 
   override def equals(other: Any): Boolean = other match {
-    case that: Node =>
+    case that: INode[T] =>
       (that canEqual this) &&
         id == that.id
     case _ => false
@@ -49,11 +49,13 @@ class Node(val id: Int) extends Weight with Ordered[Node] {
 
 /**
  * A path has weight, composed of a list of nodes
- * @param nodeList
+ * @param nodeList A list of nodes in the path
  */
-class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
+class IPath[T](val nodeList: List[INode[T]]) extends Weight with Ordered[IPath[T]] {
 
-  override def compare(that: Path): Int =
+  type Node = INode[T]
+
+  override def compare(that: IPath[T]): Int =
     if (this.getWeight - that.getWeight < 0)
       1
     else if (this.getWeight - that.getWeight > 0)
@@ -63,10 +65,10 @@ class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
 
   override def toString = nodeList.toString() + "[" + this.getWeight + "]"
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[Path]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[IPath[T]]
 
   override def equals(other: Any): Boolean = other match {
-    case that: Path =>
+    case that: IPath[T] =>
       (that canEqual this) &&
         nodeList == that.nodeList
     case _ => false
@@ -79,23 +81,33 @@ class Path(val nodeList: List[Node]) extends Weight with Ordered[Path] {
 }
 
 
-class WeightedDirectedGraph {
+class WeightedDirectedGraph[T] {
 
-  private val nodeIndexMap = Map[Int, Node]()
-  private val edgeWeightIndexMap = Map[(Node, Node), Double]()
-  private val fanOutIndexMap = Map[Node, Set[Node]]()
-  private val fanInIndexMap = Map[Node, Set[Node]]()
+  type Node = INode[T]
 
-  def fanOut(node: Node) = fanOutIndexMap.get(node).getOrElse(Set.empty)
-  def fanIn(node: Node) = fanInIndexMap.get(node).getOrElse(Set.empty)
-  def edgeWeight(start: Node, end: Node) = edgeWeightIndexMap.get((start, end)).getOrElse(Double.MaxValue)
-  def node(id: Int) = nodeIndexMap.get(id).get
+  private val nodeIndexMap = collection.mutable.Map[T, Node]()
+  private val edgeWeightIndexMap = collection.mutable.Map[(Node, Node), Double]()
+  private val fanOutIndexMap = collection.mutable.Map[Node, collection.mutable.Set[Node]]()
+  private val fanInIndexMap = collection.mutable.Map[Node, collection.mutable.Set[Node]]()
+
+  def fanOut(node: Node) = fanOutIndexMap.getOrElse(node, collection.mutable.Set.empty)
+  def fanIn(node: Node) = fanInIndexMap.getOrElse(node, collection.mutable.Set.empty)
+  def edgeWeight(start: Node, end: Node) = edgeWeightIndexMap.getOrElse((start, end), Double.MaxValue)
+  def node(id: T) = nodeIndexMap.get(id).get
   def edge = edgeWeightIndexMap.keySet
+
+  def addNode(node: T): Node = {
+    addNode(new Node(node))
+  }
 
   def addNode(node: Node): Node = {
     require(!nodeIndexMap.contains(node.id), node.id + " in " + nodeIndexMap) // necessary?
     nodeIndexMap(node.id) = node
     node
+  }
+
+  def addEdge(start: T, end: T, weight: Double): Unit = {
+    addEdge(new Node(start), new Node(end), weight)
   }
 
   def addEdge(start: Node, end: Node, weight: Double): Unit = {
@@ -111,14 +123,14 @@ class WeightedDirectedGraph {
       fanInIndexMap(end) += start
     }
     else {
-      var idList = Set[Node]()
+      var idList = collection.mutable.Set[Node]()
       idList += start
       fanInIndexMap.put(end, idList)
     }
     if (fanOutIndexMap.contains(start)) {
       fanOutIndexMap(start) += end
     } else {
-      var idList = Set[Node]()
+      var idList = collection.mutable.Set[Node]()
       idList += end
       fanOutIndexMap.put(start, idList)
     }
@@ -126,10 +138,10 @@ class WeightedDirectedGraph {
   }
 }
 
-class ChangableWeightedDirectedGraph extends  WeightedDirectedGraph {
+class ChangableWeightedDirectedGraph[T] extends  WeightedDirectedGraph[T] {
 
-  private val removedNodeSet = Set[Node]()
-  private val removedEdgeSet = Set[(Node, Node)]()
+  private val removedNodeSet = collection.mutable.Set[Node]()
+  private val removedEdgeSet = collection.mutable.Set[(Node, Node)]()
 
   def remove(node: Node) = { removedNodeSet += node }
   def remove(edge: (Node,Node)) = { removedEdgeSet += edge }
@@ -138,10 +150,10 @@ class ChangableWeightedDirectedGraph extends  WeightedDirectedGraph {
   def recover(edge: (Node, Node)) = { removedEdgeSet -= edge }
   def recover() = { removedEdgeSet.clear(); removedNodeSet.clear() }
 
-  override def fanIn(node: Node) = if (removedNodeSet.contains(node)) Set.empty else
+  override def fanIn(node: Node) = if (removedNodeSet.contains(node)) collection.mutable.Set.empty else
     super.fanIn(node).--(removedNodeSet).filterNot(pre => removedEdgeSet.contains((pre, node)))
 
-  override def fanOut(node: Node) = if (removedNodeSet.contains(node)) Set.empty else
+  override def fanOut(node: Node) = if (removedNodeSet.contains(node)) collection.mutable.Set.empty else
     super.fanOut(node).--(removedNodeSet).filterNot(next => removedEdgeSet.contains(node, next))
 
   override def edgeWeight(start: Node, end: Node) = if (removedEdgeSet.contains((start, end))) Double.MaxValue else super.edgeWeight(start, end)
